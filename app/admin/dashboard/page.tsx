@@ -178,7 +178,7 @@ export default function AdminDashboard() {
                   <h2 className="text-2xl font-bold font-primary text-gray-900">Content Hub</h2>
                 </div>
                 <p className="text-gray-600 mb-8 max-w-sm">Write SEO-optimized blog posts, manage metadata, and toggle publishing states.</p>
-                <div className="flex gap-4">
+                <div className="flex flex-col gap-4 sm:flex-row">
                   <Link
                     href="/admin/blog"
                     className="flex-1 bg-white border-2 border-gray-200 hover:border-blue-600 text-gray-700 hover:text-blue-600 font-bold py-3 px-4 rounded-xl text-center transition-premium"
@@ -190,6 +190,12 @@ export default function AdminDashboard() {
                     className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-premium"
                   >
                     + Write Post
+                  </Link>
+                  <Link
+                    href="/admin/blog/seed"
+                    className="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-premium"
+                  >
+                    Seed Content
                   </Link>
                 </div>
               </div>
