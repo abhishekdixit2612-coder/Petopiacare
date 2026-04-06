@@ -160,11 +160,11 @@ export default function AdminDashboard() {
                     + Add Product
                   </Link>
                   <Link
-                    href="/admin/import"
+                    href="/admin/import-variants"
                     className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-premium flex items-center justify-center gap-2"
                   >
                     <Upload size={18} />
-                    Import CSV
+                    Import Variants
                   </Link>
                 </div>
               </div>

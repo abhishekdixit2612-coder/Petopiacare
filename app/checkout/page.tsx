@@ -11,6 +11,7 @@ export default function CheckoutPage() {
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1); // 1: Shipping, 2: Payment
+  const [error, setError] = useState('');
 
   const [formData, setFormData] = useState({
     name: 'Abhishek Dixit',
@@ -39,12 +40,43 @@ export default function CheckoutPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleSimulatePayment = () => {
+  const handleSimulatePayment = async () => {
     setLoading(true);
-    setTimeout(() => {
+
+    try {
+      const response = await fetch('/api/save-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          customer_name: formData.name,
+          customer_email: formData.email,
+          customer_phone: formData.phone,
+          total_amount: cartTotal(),
+          razorpay_order_id: null,
+          razorpay_payment_id: null,
+          shipping_address: formData.address,
+          city: formData.city,
+          pincode: formData.pincode,
+          cart_items: items,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || data.error) {
+        throw new Error(data.error || 'Unable to save order.');
+      }
+
       clearCart();
-      router.push('/order-confirmation?order_id=ORD-' + Math.floor(Math.random() * 1000000));
-    }, 2000);
+      router.push(`/order-confirmation?order_id=${data.order_id}`);
+    } catch (submitError) {
+      console.error('Checkout error:', submitError);
+      setError('Unable to complete the order. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!mounted || items.length === 0) return null;
@@ -141,6 +173,11 @@ export default function CheckoutPage() {
                   <Lock className="w-6 h-6 text-[#1A7D80]" /> Secure Payment
                 </h2>
                 
+                {error && (
+                  <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
+                    {error}
+                  </div>
+                )}
                 <div className="bg-gray-50 p-6 rounded-2xl mb-8 border border-gray-100">
                   <div className="flex justify-between items-center mb-4">
                     <h3 className="font-bold text-gray-900">Ship to:</h3>

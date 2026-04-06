@@ -3,12 +3,22 @@ CREATE TABLE products (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name VARCHAR NOT NULL,
   description TEXT,
-  price DECIMAL(10, 2) NOT NULL,
-  cost DECIMAL(10, 2),
-  sku VARCHAR UNIQUE NOT NULL,
   category VARCHAR,
   image_url VARCHAR,
-  stock_quantity INT DEFAULT 100,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Variants table
+CREATE TABLE variants (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  product_id UUID REFERENCES products(id) ON DELETE CASCADE,
+  sku VARCHAR UNIQUE NOT NULL,
+  variant_name VARCHAR,
+  option1_name VARCHAR,
+  option1_value VARCHAR,
+  price DECIMAL(10, 2) NOT NULL,
+  cost DECIMAL(10, 2),
+  stock_quantity INT DEFAULT 0,
   created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -33,6 +43,8 @@ CREATE TABLE order_items (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   order_id UUID REFERENCES orders(id) ON DELETE CASCADE,
   product_id UUID REFERENCES products(id),
+  variant_id UUID REFERENCES variants(id),
+  sku VARCHAR,
   quantity INT NOT NULL,
   price_at_purchase DECIMAL(10, 2),
   created_at TIMESTAMP DEFAULT NOW()
