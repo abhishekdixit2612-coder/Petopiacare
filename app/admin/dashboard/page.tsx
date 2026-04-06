@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { LogOut, Package, BookOpen, Settings, Upload } from 'lucide-react';
+import { LogOut, Package, BookOpen, Settings, Upload, Download } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 export default function AdminDashboard() {
@@ -136,7 +136,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative">
               {/* Products Card */}
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                 <div className="flex items-center gap-4 mb-4">
@@ -146,22 +146,22 @@ export default function AdminDashboard() {
                   <h2 className="text-2xl font-bold font-primary text-gray-900">Inventory</h2>
                 </div>
                 <p className="text-gray-600 mb-8 max-w-sm">Manage physical products, update stock quantities, and adjust pricing.</p>
-                <div className="flex gap-4">
+                <div className="flex flex-col gap-3">
                   <Link
                     href="/admin/products"
-                    className="flex-1 bg-white border-2 border-gray-200 hover:border-[#1A7D80] text-gray-700 hover:text-[#1A7D80] font-bold py-3 px-4 rounded-xl text-center transition-premium"
+                    className="w-full bg-white border-2 border-gray-200 hover:border-[#1A7D80] text-gray-700 hover:text-[#1A7D80] font-bold py-3 px-4 rounded-xl text-center transition-premium"
                   >
                     View All
                   </Link>
                   <Link
                     href="/admin/products/new"
-                    className="flex-1 bg-[#1A7D80] hover:bg-[#126265] text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-premium"
+                    className="w-full bg-[#1A7D80] hover:bg-[#126265] text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-premium"
                   >
                     + Add Product
                   </Link>
                   <Link
                     href="/admin/import-variants"
-                    className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-premium flex items-center justify-center gap-2"
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-premium flex items-center justify-center gap-2"
                   >
                     <Upload size={18} />
                     Import Variants
@@ -177,25 +177,50 @@ export default function AdminDashboard() {
                   </div>
                   <h2 className="text-2xl font-bold font-primary text-gray-900">Content Hub</h2>
                 </div>
-                <p className="text-gray-600 mb-8 max-w-sm">Write SEO-optimized blog posts, manage metadata, and toggle publishing states.</p>
-                <div className="flex flex-col gap-4 sm:flex-row">
+                <p className="text-gray-600 mb-8 max-w-sm">Write SEO-optimized blog posts, manage metadata, and launch priority content.</p>
+                <div className="flex flex-col gap-3">
                   <Link
                     href="/admin/blog"
-                    className="flex-1 bg-white border-2 border-gray-200 hover:border-blue-600 text-gray-700 hover:text-blue-600 font-bold py-3 px-4 rounded-xl text-center transition-premium"
+                    className="w-full bg-white border-2 border-gray-200 hover:border-blue-600 text-gray-700 hover:text-blue-600 font-bold py-3 px-4 rounded-xl text-center transition-premium"
                   >
                     View Posts
                   </Link>
                   <Link
                     href="/admin/blog/new"
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-premium"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-premium"
                   >
                     + Write Post
                   </Link>
                   <Link
                     href="/admin/blog/seed"
-                    className="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-premium"
+                    className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-premium"
                   >
                     Seed Content
+                  </Link>
+                </div>
+              </div>
+
+              {/* Digital Products Card */}
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                    <Download size={24} />
+                  </div>
+                  <h2 className="text-2xl font-bold font-primary text-gray-900">Digital Products</h2>
+                </div>
+                <p className="text-gray-600 mb-8 max-w-sm">Seed free downloads and paid courses for your customers.</p>
+                <div className="flex flex-col gap-3">
+                  <Link
+                    href="/digital-products"
+                    className="w-full bg-white border-2 border-gray-200 hover:border-green-600 text-gray-700 hover:text-green-600 font-bold py-3 px-4 rounded-xl text-center transition-premium"
+                  >
+                    View Catalog
+                  </Link>
+                  <Link
+                    href="/admin/digital-products/new"
+                    className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-premium"
+                  >
+                    + Add Digital Products
                   </Link>
                 </div>
               </div>

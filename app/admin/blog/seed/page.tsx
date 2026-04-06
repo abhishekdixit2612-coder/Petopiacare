@@ -7,6 +7,21 @@ import { ArrowLeft, Sparkles } from 'lucide-react';
 
 const seedPosts = [
   {
+    title: 'Homemade Dog Food Recipe for Indian Dogs (Budget-Friendly & Healthy)',
+    slug: 'homemade-dog-food-recipe-indian-dogs',
+    excerpt: 'Learn how to make nutritious, budget-friendly dog food at home. Step-by-step recipes perfect for Indian dog breeds. Safe ingredients, cost-effective, and loved by dogs.',
+    content: '<h2>Introduction</h2><p>Your dog deserves healthy, nutritious food. Many Indian pet parents worry about commercial dog food quality or budget constraints. This guide shows you how to prepare homemade dog food that\'s healthier, cheaper, and just as nutritious.</p><h2>Why Homemade Dog Food?</h2><p>Homemade dog food gives you full control over ingredients, avoids preservatives and fillers, and can cost only ₹30-50 a day compared to ₹100-200 for premium brands. It is perfect for the Indian climate and especially helpful for dogs with allergies.</p><h2>Recipe 1: Basic Chicken & Rice</h2><p>Ingredients: 2 cups cooked chicken (boiled, no salt), 1 cup cooked brown rice, 1/2 cup cooked vegetables (carrots, beans, peas), 1 tbsp coconut oil, 1/2 tsp turmeric, pinch of salt.</p><p>Instructions: Boil chicken until tender, cook brown rice separately, boil vegetables until soft, mix all ingredients, store in refrigerator for 3-4 days, and serve at room temperature.</p><p>Nutritional benefits: protein from chicken, carbs from brown rice, fiber from vegetables, immunity support from turmeric.</p><h2>Recipe 2: Beef & Veggie Mix</h2><p>Ingredients: 2 cups cooked lean beef, 1 cup cooked rice or millet, 1/2 cup cooked vegetables, 1 tbsp ghee or coconut oil, 1/2 tsp turmeric, pinch of salt.</p><p>Instructions: Boil beef until fully cooked, prepare the grain separately, steam vegetables until soft, mix everything, keep refrigerated for 3-4 days, and serve warm.</p><p>Beef provides rich protein, grains offer energy, vegetables add fiber, and turmeric supports immunity.</p><h2>Common Mistakes to Avoid</h2><p>Do not use onions or garlic, which are toxic to dogs. Avoid oversalting, uncooked vegetables, and spices other than turmeric. Never add chocolate, grapes, or avocado. Keep portion sizes balanced and change recipes gradually.</p><h2>Cost Breakdown</h2><p>Chicken costs about ₹150/kg or ₹25/day, rice costs ₹40/kg or ₹2/day, vegetables cost about ₹50 total or ₹3/day, and oil plus turmeric add about ₹2/day. Total cost is roughly ₹32/day versus ₹150+ for commercial options.</p><h2>FAQ</h2><p>Q: Can I use bones? A: Remove all bones. Cooked bones can splinter. Q: How often should I change recipes? A: Rotate every 2-3 weeks. Q: What about puppies? A: Serve smaller portions more frequently with puppy-safe nutrition.</p>',
+    featured_image: 'https://images.unsplash.com/photo-1568572933382-74d440642117?w=800&q=80',
+    category: 'Nutrition',
+    author: 'PetopiaCare Experts',
+    read_time_minutes: 8,
+    status: 'published',
+    seo_title: 'Homemade Dog Food Recipe for Indian Dogs (Budget & Healthy)',
+    seo_description: 'Step-by-step homemade dog food recipes for Indian dogs. Budget-friendly, healthy ingredients. Save ₹100+ monthly vs commercial brands.',
+    seo_keywords: 'homemade dog food recipe, dog food recipes india, budget dog food, healthy dog food, homemade dog food for indian dogs',
+    date: 'Apr 06, 2026',
+  },
+  {
     title: 'Best Dog Food Brands in India for 2026',
     slug: 'best-dog-food-brands-india',
     excerpt: 'Find India’s top dog food brands, nutrition ratings, and matching recipes for every breed and budget.',

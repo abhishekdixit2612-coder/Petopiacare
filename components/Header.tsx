@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingCart, Menu, X, Search, User } from "lucide-react";
+import { ShoppingCart, Menu, X, Search, User, ChevronDown } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -58,11 +58,35 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex space-x-6 xl:space-x-8 items-center">
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
             <Link href="/" className="text-gray-700 hover:text-[#1A7D80] font-medium transition-premium tracking-wide">Home</Link>
-            <Link href="/products" className="text-gray-700 hover:text-[#1A7D80] font-medium transition-premium tracking-wide">Shop</Link>
-            <Link href="/blog" className="text-gray-700 hover:text-[#1A7D80] font-medium transition-premium tracking-wide">Blog</Link>
-            <Link href="/digital-products" className="text-gray-700 hover:text-[#1A7D80] font-medium transition-premium tracking-wide">Digital Products</Link>
+            <div className="relative group">
+              <button type="button" className="flex items-center gap-1 text-gray-700 hover:text-[#1A7D80] font-medium transition-premium tracking-wide">
+                Shop
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 absolute left-0 top-full mt-3 w-56 rounded-3xl border border-gray-200 bg-white shadow-xl py-4">
+                <Link href="/products" className="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">All Products</Link>
+                <Link href="/products?category=Harnesses" className="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">Harnesses</Link>
+                <Link href="/products?category=Leashes" className="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">Leashes</Link>
+                <Link href="/products?category=Collars" className="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">Collars</Link>
+                <Link href="/products?category=Beds" className="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">Beds</Link>
+                <Link href="/products?category=Grooming" className="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">Grooming</Link>
+                <Link href="/products?category=Accessories" className="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">Accessories</Link>
+              </div>
+            </div>
+            <div className="relative group">
+              <button type="button" className="flex items-center gap-1 text-gray-700 hover:text-[#1A7D80] font-medium transition-premium tracking-wide">
+                Resources
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 absolute left-0 top-full mt-3 w-56 rounded-3xl border border-gray-200 bg-white shadow-xl py-4">
+                <Link href="/blog" className="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">Blog</Link>
+                <Link href="/digital-products" className="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">Digital Products</Link>
+                <Link href="/digital-products?category=Checklist" className="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">Free Guides</Link>
+                <Link href="/faq" className="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50">FAQ</Link>
+              </div>
+            </div>
             <Link href="/about" className="text-gray-700 hover:text-[#1A7D80] font-medium transition-premium tracking-wide">About</Link>
             <Link href="/contact" className="text-gray-700 hover:text-[#1A7D80] font-medium transition-premium tracking-wide">Contact</Link>
           </nav>
