@@ -61,3 +61,5 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error('Save Order Error:', error);
     return NextResponse.json({ error: 'Error saving order' }, { status: 500 });
+  }
+}
