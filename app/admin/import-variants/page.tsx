@@ -127,6 +127,7 @@ export default function ImportVariants() {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const [allProducts, setAllProducts] = useState<ParsedVariant[]>([]);
   const [preview, setPreview] = useState<ParsedVariant[]>([]);
   const [result, setResult] = useState<ImportResult | null>(null);
   const [error, setError] = useState('');
@@ -136,6 +137,7 @@ export default function ImportVariants() {
     const selectedFile = e.target.files?.[0] || null;
     setFile(selectedFile);
     setError('');
+    setAllProducts([]);
     setPreview([]);
     setResult(null);
     setStep('upload');
@@ -269,6 +271,7 @@ export default function ImportVariants() {
       if (products.length === 0) {
         throw new Error('No valid products found in the CSV.');
       }
+      setAllProducts(products);
       setPreview(products.slice(0, 5));
       setStep('preview');
     } catch (previewError) {
@@ -279,7 +282,7 @@ export default function ImportVariants() {
   };
 
   const handleImport = async () => {
-    if (!preview.length || !file) {
+    if (!allProducts.length || !file) {
       setError('No products to import. Please run a preview first.');
       return;
     }
@@ -296,7 +299,7 @@ export default function ImportVariants() {
     };
 
     try {
-      const products = await parseCSV(file);
+      const products = allProducts;
 
       for (const product of products) {
         try {
@@ -337,10 +340,23 @@ export default function ImportVariants() {
           results.variantsCreated += product.variants.length;
         } catch (insertError) {
           results.failed += 1;
-          results.errors.push(
-            `Product "${product.productName}": ${insertError instanceof Error ? insertError.message : 'Unknown error'}`
-          );
+          let errorMsg = 'Unknown error';
+          if (insertError instanceof Error) {
+            errorMsg = insertError.message;
+          } else if (typeof insertError === 'object' && insertError !== null && 'message' in insertError) {
+            errorMsg = String((insertError as any).message);
+          } else if (typeof insertError === 'object' && insertError !== null && 'error_description' in insertError) {
+            errorMsg = String((insertError as any).error_description);
+          }
+          results.errors.push(`Product "${product.productName}": ${errorMsg}`);
         }
+      }
+
+      if (results.productsCreated === 0 && results.failed === 0) {
+        setError('No products were imported. Check your CSV format and try again.');
+        setStep('preview');
+        setLoading(false);
+        return;
       }
 
       setResult(results);
