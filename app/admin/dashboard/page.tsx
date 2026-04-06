@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { LogOut, Package, BookOpen, Settings } from 'lucide-react';
+import { LogOut, Package, BookOpen, Settings, Upload } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 export default function AdminDashboard() {
@@ -158,6 +158,13 @@ export default function AdminDashboard() {
                     className="flex-1 bg-[#1A7D80] hover:bg-[#126265] text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-premium"
                   >
                     + Add Product
+                  </Link>
+                  <Link
+                    href="/admin/import"
+                    className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-premium flex items-center justify-center gap-2"
+                  >
+                    <Upload size={18} />
+                    Import CSV
                   </Link>
                 </div>
               </div>
