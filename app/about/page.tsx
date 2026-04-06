@@ -165,9 +165,9 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                name: 'Abhishek',
-                role: 'Founder & Head of Design',
-                bio: 'Dog lover, designer, and builder. Passionate about creating products that dogs love.',
+                name: 'Abhishek & Neha',
+                role: 'Co-Founders & Show Runners',
+                bio: 'Dog lovers, designers, and builders. Passionate about creating products that dogs love.',
               },
               {
                 name: 'Our Dogs',
