@@ -19,7 +19,10 @@ export default function DigitalProductsPage() {
   }, []);
 
   const filteredProducts = products.filter(p => categoryFilter === "All" || p.category === categoryFilter);
-  const categories = ["All", "eBook", "Course", "Checklist"];
+  const categories = [
+    "All",
+    ...Array.from(new Set(products.map((product) => product.category).filter(Boolean))),
+  ];
 
   return (
     <div className="bg-gray-50 min-h-screen">

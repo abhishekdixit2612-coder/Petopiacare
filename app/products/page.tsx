@@ -13,6 +13,45 @@ interface ProductCard {
   variantCount: number;
 }
 
+const FALLBACK_PRODUCTS: ProductCard[] = [
+  {
+    id: 'p1',
+    name: 'Saffron Comfort Dog Harness',
+    image_url: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=800&q=80',
+    category: 'Harnesses',
+    minPrice: 899,
+    maxPrice: 1299,
+    variantCount: 3,
+  },
+  {
+    id: 'p2',
+    name: 'Eco Leash with Leather Handle',
+    image_url: 'https://images.unsplash.com/photo-1507146426996-ef05306b995a?w=800&q=80',
+    category: 'Leashes',
+    minPrice: 499,
+    maxPrice: 699,
+    variantCount: 2,
+  },
+  {
+    id: 'p3',
+    name: 'Cooling Mesh Dog Bed',
+    image_url: 'https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?w=800&q=80',
+    category: 'Beds',
+    minPrice: 1399,
+    maxPrice: 1899,
+    variantCount: 4,
+  },
+  {
+    id: 'p4',
+    name: 'Gentle Grooming Kit',
+    image_url: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?w=800&q=80',
+    category: 'Grooming',
+    minPrice: 599,
+    maxPrice: 599,
+    variantCount: 1,
+  },
+];
+
 export default function ProductsPage() {
   const [products, setProducts] = useState<ProductCard[]>([]);
   const [filter, setFilter] = useState("All");
@@ -28,7 +67,7 @@ export default function ProductsPage() {
           .select("id,name,image_url,category,variants(price)")
           .order("created_at", { ascending: false });
 
-        if (data) {
+        if (data && data.length > 0) {
           const formatted = data.map((product: any) => {
             const prices = Array.isArray(product.variants)
               ? product.variants.map((variant: any) => Number(variant.price)).filter((price: number) => !Number.isNaN(price))
@@ -45,6 +84,8 @@ export default function ProductsPage() {
             };
           });
           setProducts(formatted);
+        } else {
+          setProducts(FALLBACK_PRODUCTS);
         }
       } catch (error) {
         console.error("Error fetching products:", error);

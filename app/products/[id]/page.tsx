@@ -21,6 +21,43 @@ interface Product {
   category: string;
 }
 
+const MOCK_PRODUCTS: Array<Product & { variants: Variant[] }> = [
+  {
+    id: 'p1',
+    name: 'Saffron Comfort Dog Harness',
+    description: 'A breathable, adjustable harness designed for everyday walks and active dogs.',
+    image_url: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=800&q=80',
+    category: 'Harnesses',
+    variants: [
+      { id: 'p1v1', option1_value: 'Small', variant_name: 'Small', price: 899, stock_quantity: 12, sku: 'HARN-SM-001' },
+      { id: 'p1v2', option1_value: 'Medium', variant_name: 'Medium', price: 999, stock_quantity: 18, sku: 'HARN-MD-001' },
+      { id: 'p1v3', option1_value: 'Large', variant_name: 'Large', price: 1299, stock_quantity: 8, sku: 'HARN-LG-001' },
+    ],
+  },
+  {
+    id: 'p2',
+    name: 'Eco Leash with Leather Handle',
+    description: 'Durable, eco-friendly leash with a soft leather handle for easy grip and comfort.',
+    image_url: 'https://images.unsplash.com/photo-1507146426996-ef05306b995a?w=800&q=80',
+    category: 'Leashes',
+    variants: [
+      { id: 'p2v1', option1_value: 'Single Size', variant_name: 'Single Size', price: 499, stock_quantity: 25, sku: 'LEAS-01' },
+      { id: 'p2v2', option1_value: 'Premium', variant_name: 'Premium', price: 699, stock_quantity: 14, sku: 'LEAS-02' },
+    ],
+  },
+  {
+    id: 'p3',
+    name: 'Cooling Mesh Dog Bed',
+    description: 'Soft and supportive bed with cooling mesh fabric, ideal for warm weather and restful sleep.',
+    image_url: 'https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?w=800&q=80',
+    category: 'Beds',
+    variants: [
+      { id: 'p3v1', option1_value: 'Small', variant_name: 'Small', price: 1399, stock_quantity: 20, sku: 'BED-SM-01' },
+      { id: 'p3v2', option1_value: 'Large', variant_name: 'Large', price: 1899, stock_quantity: 10, sku: 'BED-LG-01' },
+    ],
+  },
+];
+
 export default function ProductDetail({ params }: { params: { id: string } }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [variants, setVariants] = useState<Variant[]>([]);
@@ -31,23 +68,49 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const { data: productData } = await supabase
+        const { data: productData, error: productError } = await supabase
           .from("products")
           .select("id,name,description,image_url,category")
           .eq("id", params.id)
           .single();
 
-        const { data: variantData } = await supabase
+        const { data: variantData, error: variantError } = await supabase
           .from("variants")
           .select("id,option1_value,variant_name,price,stock_quantity,sku")
           .eq("product_id", params.id)
           .order("created_at", { ascending: true });
+
+        if (productError || !productData) {
+          const fallback = MOCK_PRODUCTS.find((item) => item.id === params.id);
+          if (fallback) {
+            setProduct(fallback);
+            setVariants(fallback.variants);
+            setSelectedVariant(fallback.variants[0] || null);
+            return;
+          }
+        }
+
+        if (variantError || !variantData || variantData.length === 0) {
+          const fallback = MOCK_PRODUCTS.find((item) => item.id === params.id);
+          if (fallback) {
+            setProduct(fallback);
+            setVariants(fallback.variants);
+            setSelectedVariant(fallback.variants[0] || null);
+            return;
+          }
+        }
 
         setProduct(productData as Product | null);
         setVariants((variantData as Variant[] | null) || []);
         setSelectedVariant((variantData as Variant[] | null)?.[0] || null);
       } catch (error) {
         console.error("Error loading product:", error);
+        const fallback = MOCK_PRODUCTS.find((item) => item.id === params.id);
+        if (fallback) {
+          setProduct(fallback);
+          setVariants(fallback.variants);
+          setSelectedVariant(fallback.variants[0] || null);
+        }
       } finally {
         setLoading(false);
       }
