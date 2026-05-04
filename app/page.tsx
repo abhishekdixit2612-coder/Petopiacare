@@ -1,186 +1,301 @@
-"use client";
-import Link from "next/link";
-import ProductCard from "@/components/ProductCard";
-import BannerCarousel from "@/components/BannerCarousel";
-import { ArrowRight, ShieldCheck, Heart, Truck, Star, Award, BookOpen } from "lucide-react";
+'use client';
 
-const featuredProducts = [
-  { id: "1", name: "Classic Teal Collar", price: 499, category: "Collars", image_url: "https://images.unsplash.com/photo-1605365859556-9dccdb0e3092?w=800&q=80" },
-  { id: "2", name: "Comfort Harness Orange", price: 899, category: "Harnesses", image_url: "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?w=800&q=80" },
-  { id: "3", name: "Durable Training Leash", price: 599, category: "Leashes", image_url: "https://images.unsplash.com/photo-1605365859346-a4a3501a4fc6?w=800&q=80" },
-  { id: "4", name: "Premium Squeaky Toy", price: 299, category: "Toys", image_url: "https://images.unsplash.com/photo-1576624933939-9d54e4708709?w=800&q=80" },
-];
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/Button';
+import { Badge } from '@/components/Badge';
+import Image from 'next/image';
+import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
+import { ChevronRight, ShieldCheck, CloudSun, BookOpen } from 'lucide-react';
 
-const mockBlogs = [
-  { id: "b1", title: "Best Dog Food Brands in India (2025 Review)", category: "Nutrition", date: "Mar 15, 2025", readTime: "5 min", image: "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=800&q=80", slug: "best-dog-food-brands-india" },
-  { id: "b2", title: "Stop Dog Pulling on Leash: Training Tips", category: "Training", date: "Mar 10, 2025", readTime: "4 min", image: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80", slug: "stop-dog-pulling-leash" },
-  { id: "b3", title: "Summer Dog Care in India: Hydration Guide", category: "Health", date: "Mar 05, 2025", readTime: "6 min", image: "https://images.unsplash.com/photo-1537151608804-ea6f25dc1005?w=800&q=80", slug: "summer-dog-care-india" }
-];
+interface FeaturedProduct {
+  id: string;
+  name: string;
+  image_url: string;
+  category: string;
+  minPrice: number;
+}
 
-const testimonials = [
-  { name: "Priya Sharma", dog: "Luna (Golden Retriever)", text: "The teal collar is stunning and the quality is unmatched. Luna looks so beautiful!" },
-  { name: "Rahul Deshmukh", dog: "Bruno (Indie)", text: "Finally an Indian brand that understands our pets' needs. The harness fits Bruno perfectly." },
-  { name: "Anjali Gupta", dog: "Max (Beagle)", text: "Fast delivery to Bangalore and the training leash has been a life saver for our walks." },
+function getImageSrc(url: string): string {
+  if (!url) return '';
+  let match = url.match(/drive\.google\.com\/file\/d\/([^/?]+)/);
+  if (match) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800`;
+  match = url.match(/drive\.google\.com\/uc[^?]*\?.*[?&]id=([^&]+)/);
+  if (match) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800`;
+  return url;
+}
+
+const CATEGORIES = [
+  {
+    label: 'Harnesses',
+    desc: 'No-choke designs built for Indian breeds. Adjustable, breathable, weather-resistant.',
+    href: '/products?category=Harnesses',
+    emoji: '🐾',
+  },
+  {
+    label: 'Leashes',
+    desc: 'Rope, nylon & designer leashes in every width. Strong clips, comfortable grips.',
+    href: '/products?category=Standard+Leashes',
+    emoji: '🦮',
+  },
+  {
+    label: 'Collars',
+    desc: 'Padded cotton, nylon & polymer collars. Lightweight, washable, long-lasting.',
+    href: '/products?category=Standard+Collars',
+    emoji: '🏷️',
+  },
 ];
 
 export default function Home() {
+  const [featured, setFeatured] = useState<FeaturedProduct[]>([]);
+  const [loadingFeatured, setLoadingFeatured] = useState(true);
+
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const { data } = await supabase
+          .from('products')
+          .select('id,name,image_url,category,variants(price)')
+          .order('created_at', { ascending: false })
+          .limit(4);
+
+        if (data && data.length > 0) {
+          setFeatured(
+            data.map((p: any) => {
+              const prices = Array.isArray(p.variants)
+                ? p.variants.map((v: any) => Number(v.price)).filter(Boolean)
+                : [];
+              return {
+                id: p.id,
+                name: p.name,
+                image_url: p.image_url,
+                category: p.category,
+                minPrice: prices.length ? Math.min(...prices) : 0,
+              };
+            })
+          );
+        }
+      } finally {
+        setLoadingFeatured(false);
+      }
+    };
+    fetchFeatured();
+  }, []);
+
   return (
-    <div className="flex flex-col min-h-screen">
-      
-      {/* 1. HERO SECTION (Banner Carousel) */}
-      <BannerCarousel />
-
-      {/* 2. VALUE PROPOSITION (Why Choose Us) */}
-      <section className="py-24 bg-[#FAFAFA]">
+    <main className="bg-white">
+      {/* HERO */}
+      <section className="relative py-14 md:py-24 bg-gradient-to-br from-primary-50 via-white to-primary-50 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="font-primary text-3xl md:text-4xl font-bold text-[#1C1C1C]">Why Choose PetopiaCare?</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            
-            <div className="bg-white p-8 rounded-2xl shadow-premium text-center hover:-translate-y-2 transition-premium border border-gray-100">
-              <div className="w-16 h-16 mx-auto bg-[#C8E3E2] text-[#1A7D80] rounded-full flex items-center justify-center mb-6">
-                <Award className="w-8 h-8" />
-              </div>
-              <h3 className="font-primary font-bold text-xl text-gray-900 mb-4">Premium Quality</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Every single product is field-tested with our own pets to guarantee strength, durability, and absolute safety for your furry companion.
-              </p>
-            </div>
-
-            <div className="bg-white p-8 rounded-2xl shadow-premium text-center hover:-translate-y-2 transition-premium border border-gray-100 mt-0 md:-mt-6">
-              <div className="w-16 h-16 mx-auto bg-[#FFD166]/30 text-[#F2A65A] rounded-full flex items-center justify-center mb-6">
-                <Heart className="w-8 h-8" />
-              </div>
-              <h3 className="font-primary font-bold text-xl text-gray-900 mb-4">India-First Design</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Tired of imported gear tearing apart? We engineer materials specifically suited for the unpredictable Indian climates and active Indies.
-              </p>
-            </div>
-
-            <div className="bg-white p-8 rounded-2xl shadow-premium text-center hover:-translate-y-2 transition-premium border border-gray-100">
-              <div className="w-16 h-16 mx-auto bg-[#C8E3E2] text-[#1A7D80] rounded-full flex items-center justify-center mb-6">
-                <BookOpen className="w-8 h-8" />
-              </div>
-              <h3 className="font-primary font-bold text-xl text-gray-900 mb-4">Expert Guidance</h3>
-              <p className="text-gray-600 leading-relaxed">
-                We don't just sell products. Access our library of free training guides, nutrition tips, and behavioral advice from certified experts.
-              </p>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* 3. FEATURED PRODUCTS (Best Sellers) */}
-      <section className="py-24 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
             <div>
-              <h2 className="font-primary text-3xl md:text-4xl font-bold text-[#1C1C1C] mb-4">Best Sellers</h2>
-              <p className="text-gray-600 text-lg">Top-rated gear rigorously tested for the perfect walk.</p>
-            </div>
-            <Link href="/products" className="hidden md:flex items-center gap-2 text-[#1A7D80] font-semibold hover:text-teal-800 transition-premium">
-              Shop All Products <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-          
-          <div className="mt-12 text-center md:hidden">
-            <Link href="/products" className="inline-flex items-center gap-2 border-2 border-[#1A7D80] text-[#1A7D80] hover:bg-[#1A7D80] hover:text-white font-semibold py-3 px-8 rounded-full transition-premium">
-              View All Products
-            </Link>
-          </div>
-        </div>
-      </section>
+              <Badge variant="primary" className="mb-5">
+                🐾 India&apos;s Premium Dog Gear
+              </Badge>
+              <h1 className="text-display-lg md:text-display-md font-display text-neutral-900 mb-5 leading-tight">
+                Collars, Harnesses &amp; Leashes Built for Indian Dogs
+              </h1>
+              <p className="text-body-lg text-neutral-600 mb-8">
+                Handcrafted for India&apos;s climate. Washable, adjustable, and tested on real dogs.
+                From daily walks to outdoor adventures — gear that lasts.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button size="large" onClick={() => window.location.href = '/products'}>
+                  Shop All Products
+                </Button>
+                <Button variant="ghost" size="large" onClick={() => window.location.href = '/blog'}>
+                  Dog Care Guides
+                </Button>
+              </div>
 
-      {/* 4. TESTIMONIALS */}
-      <section className="py-24 bg-[#1A7D80] text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="font-primary text-3xl md:text-4xl font-bold mb-4 text-[#FFD166]">Happy Pups & Parents</h2>
-            <p className="text-[#C8E3E2] text-lg max-w-2xl mx-auto">Join the ever-growing PetopiaCare family.</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((t, idx) => (
-              <div key={idx} className="bg-[#0d4648] p-8 rounded-2xl shadow-lg border border-[#2B7A8F]">
-                <div className="flex text-[#FFD166] mb-4">
-                  {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 fill-current" />)}
-                </div>
-                <p className="text-lg leading-relaxed text-gray-100 mb-6 italic">"{t.text}"</p>
+              <div className="mt-10 grid grid-cols-3 gap-4 pt-8 border-t border-neutral-200">
                 <div>
-                  <h4 className="font-bold text-white font-primary">{t.name}</h4>
-                  <p className="text-[#F2A65A] text-sm">{t.dog}</p>
+                  <p className="text-heading-sm font-display text-primary-600">100+</p>
+                  <p className="text-body-sm text-neutral-500">Products</p>
+                </div>
+                <div>
+                  <p className="text-heading-sm font-display text-primary-600">3</p>
+                  <p className="text-body-sm text-neutral-500">Categories</p>
+                </div>
+                <div>
+                  <p className="text-heading-sm font-display text-primary-600">All-weather</p>
+                  <p className="text-body-sm text-neutral-500">Tested</p>
                 </div>
               </div>
-            ))}
+            </div>
+
+            <div className="relative h-80 md:h-[480px] rounded-2xl overflow-hidden shadow-xl bg-primary-100">
+              <Image
+                src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1200&q=80"
+                alt="Happy dog wearing Petopia harness"
+                fill
+                className="object-cover"
+                unoptimized
+                priority
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 5. LATEST BLOG POSTS */}
-      <section className="py-24 bg-gray-50 border-t border-gray-200">
-         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-end mb-12">
-            <div>
-              <h2 className="font-primary text-3xl md:text-4xl font-bold text-[#1C1C1C] mb-4">Latest from the Blog</h2>
-              <p className="text-gray-600 text-lg">Expert advice, nutrition tips, and training tricks.</p>
-            </div>
-            <Link href="/blog" className="hidden md:flex items-center gap-2 text-[#F2A65A] font-semibold hover:text-orange-600 transition-premium">
-              Read Our Blog <ArrowRight className="w-5 h-5" />
-            </Link>
+      {/* CATEGORIES */}
+      <section className="py-14 md:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-display-sm font-display text-neutral-900 mb-3">Shop by Category</h2>
+            <p className="text-body-md text-neutral-500">Everything your dog needs, all in one place</p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {mockBlogs.map(blog => (
-              <Link href={`/blog/${blog.slug}`} key={blog.id} className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-premium hover:shadow-premium-hover transition-premium border border-gray-100">
-                <div className="h-60 overflow-hidden relative">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={blog.image} alt={blog.title} className="w-full h-full object-cover group-hover:scale-105 transition-premium duration-500" />
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-[#1A7D80] uppercase tracking-wider">
-                    {blog.category}
-                  </div>
-                </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="text-sm text-gray-500 mb-3 font-medium">{blog.date} • {blog.readTime}</div>
-                  <h3 className="font-primary font-bold text-xl text-gray-900 mb-4 group-hover:text-[#1A7D80] transition-colors">{blog.title}</h3>
-                  <div className="mt-auto pt-6 border-t border-gray-100 text-[#F2A65A] font-semibold flex items-center gap-2">
-                    Read Post <ArrowRight className="w-4 h-4" />
-                  </div>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {CATEGORIES.map((cat) => (
+              <Link
+                key={cat.label}
+                href={cat.href}
+                className="group p-6 rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100 border border-primary-200 hover:shadow-lg hover:border-primary-300 transition-all"
+              >
+                <div className="text-4xl mb-4">{cat.emoji}</div>
+                <h3 className="text-heading-lg font-display text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">
+                  {cat.label}
+                </h3>
+                <p className="text-body-sm text-neutral-600 mb-4">{cat.desc}</p>
+                <span className="inline-flex items-center gap-1 text-primary-600 font-medium text-body-sm group-hover:gap-2 transition-all">
+                  Shop {cat.label} <ChevronRight size={15} />
+                </span>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 6. NEWSLETTER FULL WIDTH */}
-      <section className="py-20 bg-[#F2A65A] text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-primary text-3xl md:text-4xl font-bold mb-4">Get 10% Off Your First Order</h2>
-          <p className="text-white/90 text-lg mb-10 max-w-2xl mx-auto">
-            Join the PetopiaCare newsletter for exclusive discounts, free training resources, and first access to new drops!
-          </p>
-          <form className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto" onSubmit={(e) => e.preventDefault()}>
-            <input 
-              type="email" 
-              placeholder="Enter your email address..." 
-              required
-              className="flex-1 py-4 px-6 rounded-lg text-gray-900 border-none focus:ring-4 focus:ring-white/30 outline-none"
-            />
-            <button className="bg-[#1C1C1C] hover:bg-black text-white font-bold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-premium tracking-wide">
-              Subscribe
-            </button>
-          </form>
+      {/* FEATURED PRODUCTS */}
+      <section className="py-14 md:py-20 bg-neutral-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <h2 className="text-display-sm font-display text-neutral-900 mb-2">New Arrivals</h2>
+              <p className="text-body-md text-neutral-500">Just added to the collection</p>
+            </div>
+            <Link
+              href="/products"
+              className="hidden sm:inline-flex items-center gap-1 text-primary-600 font-medium text-body-sm hover:gap-2 transition-all"
+            >
+              View all <ChevronRight size={15} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {loadingFeatured
+              ? Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="rounded-2xl bg-neutral-200 animate-pulse aspect-square" />
+                ))
+              : featured.map((product) => (
+                  <Link
+                    key={product.id}
+                    href={`/products/${product.id}`}
+                    className="group bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-all border border-neutral-100"
+                  >
+                    <div className="aspect-square bg-neutral-50 overflow-hidden">
+                      {product.image_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={getImageSrc(product.image_url)}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-400"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-neutral-100 flex items-center justify-center text-neutral-300 text-body-sm">
+                          No image
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3">
+                      <p className="text-body-sm font-medium text-neutral-900 line-clamp-2 leading-snug group-hover:text-primary-600 transition-colors">
+                        {product.name}
+                      </p>
+                      {product.minPrice > 0 && (
+                        <p className="text-body-sm font-semibold text-primary-600 mt-1">
+                          from ₹{product.minPrice.toLocaleString('en-IN')}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                ))}
+          </div>
+
+          <div className="mt-8 text-center sm:hidden">
+            <Link href="/products" className="text-primary-600 font-medium text-body-sm">
+              View all products →
+            </Link>
+          </div>
         </div>
       </section>
 
-    </div>
+      {/* WHY PETOPIACARE */}
+      <section className="py-14 md:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-display-sm font-display text-center text-neutral-900 mb-12">
+            Why Dog Parents Choose PetopiaCare
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: <ShieldCheck size={28} className="text-primary-500" />,
+                title: 'Built to Last',
+                desc: 'Reinforced stitching, rust-proof hardware, and colour-fast fabric. Our products outlast the average Indian monsoon season.',
+              },
+              {
+                icon: <CloudSun size={28} className="text-primary-500" />,
+                title: 'India-First Design',
+                desc: 'Made for Indian heat and humidity. Quick-dry, breathable materials that stay comfortable on long summer walks.',
+              },
+              {
+                icon: <BookOpen size={28} className="text-primary-500" />,
+                title: 'Expert Dog Guides',
+                desc: '50+ free guides on training, nutrition, and care written specifically for Indian dog breeds and conditions.',
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="p-6 rounded-2xl border border-neutral-100 bg-neutral-50 hover:shadow-md transition-all"
+              >
+                <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-4">
+                  {item.icon}
+                </div>
+                <h3 className="text-heading-md font-display text-neutral-900 mb-2">{item.title}</h3>
+                <p className="text-body-sm text-neutral-600 leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-14 md:py-20 bg-gradient-to-r from-primary-700 to-primary-500">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-display-sm md:text-display-md font-display text-white mb-4">
+            Give your dog the gear they deserve
+          </h2>
+          <p className="text-body-lg text-primary-100 mb-8">
+            Free shipping on orders above ₹999. 30-day returns. No questions asked.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              size="large"
+              variant="secondary"
+              onClick={() => window.location.href = '/products'}
+            >
+              Shop Now
+            </Button>
+            <Button
+              size="large"
+              variant="ghost"
+              className="border-white/40 text-white hover:bg-white/10"
+              onClick={() => window.location.href = '/digital-products'}
+            >
+              Free Dog Guides
+            </Button>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

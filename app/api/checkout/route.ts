@@ -8,8 +8,8 @@ export async function POST(req: Request) {
 
     // Initialize Razorpay
     const razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID || 'test_key',
-      key_secret: process.env.RAZORPAY_KEY_SECRET || 'test_secret',
+      key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY || '',
+      key_secret: process.env.RAZORPAY_SECRET || '',
     });
 
     const options = {
