@@ -1,10 +1,8 @@
 import React from 'react';
-import { designTokens } from '@/lib/design-tokens';
 
 interface ButtonProps {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'success';
+  variant?: 'primary' | 'secondary' | 'forest' | 'ghost' | 'danger' | 'ivory';
   size?: 'small' | 'medium' | 'large';
-  state?: 'default' | 'hover' | 'active' | 'disabled' | 'loading';
   icon?: React.ReactNode;
   iconPosition?: 'left' | 'right';
   children: React.ReactNode;
@@ -12,12 +10,12 @@ interface ButtonProps {
   disabled?: boolean;
   loading?: boolean;
   className?: string;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export function Button({
   variant = 'primary',
   size = 'medium',
-  state = 'default',
   icon,
   iconPosition = 'left',
   children,
@@ -25,50 +23,37 @@ export function Button({
   disabled = false,
   loading = false,
   className = '',
+  type = 'button',
 }: ButtonProps) {
-  const baseStyles =
-    'font-medium transition-all cursor-pointer flex items-center justify-center gap-2 rounded-md';
+  // All buttons are pill-shaped per brand guidelines
+  const base = 'inline-flex items-center justify-center gap-2 font-display font-bold rounded-full transition-all cursor-pointer border-none';
 
-  const sizeClasses = {
-    small: 'h-9 px-3 text-sm',
-    medium: 'h-11 px-4 text-base',
-    large: 'h-[52px] px-6 text-lg',
+  const sizes = {
+    small:  'h-[34px] px-4 text-[12px]',
+    medium: 'h-11 px-5 text-[14px]',
+    large:  'h-[54px] px-7 text-[16px]',
   };
 
-  const variantClasses = {
-    primary:
-      'bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700 disabled:bg-neutral-300',
-    secondary:
-      'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 active:bg-neutral-300 disabled:bg-neutral-300 border border-neutral-300',
-    ghost:
-      'bg-transparent text-primary-500 hover:bg-primary-50 border border-primary-300 active:bg-primary-100',
-    danger:
-      'bg-error-500 text-white hover:bg-error-700 active:bg-error-800 disabled:bg-neutral-300',
-    success:
-      'bg-success-500 text-white hover:bg-success-700 active:bg-success-800 disabled:bg-neutral-300',
-  };
-
-  const stateClasses = {
-    default: '',
-    hover: 'shadow-md',
-    active: 'shadow-sm scale-[0.98]',
-    disabled: 'opacity-40 cursor-not-allowed',
-    loading: 'opacity-60 cursor-not-allowed',
+  const variants = {
+    primary:   'bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700 disabled:bg-neutral-200 disabled:text-neutral-400',
+    secondary: 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 border border-neutral-200',
+    forest:    'bg-forest-500 text-white hover:bg-forest-600 active:bg-forest-700',
+    ghost:     'bg-primary-50 text-primary-600 hover:bg-primary-100 border border-primary-200',
+    danger:    'bg-error-500 text-white hover:bg-error-700',
+    ivory:     'bg-neutral-50 text-forest-500 hover:bg-neutral-100 border border-neutral-200',
   };
 
   const isDisabled = disabled || loading;
 
   return (
     <button
+      type={type}
       onClick={onClick}
       disabled={isDisabled}
-      className={`${baseStyles} ${sizeClasses[size]} ${variantClasses[variant]} ${
-        stateClasses[state]
-      } ${isDisabled ? 'opacity-40 cursor-not-allowed' : ''} ${className}`}
-      style={{ transition: designTokens.transitions.base }}
+      className={`${base} ${sizes[size]} ${variants[variant]} ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
     >
       {loading && (
-        <div className="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent" />
+        <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
       )}
       {icon && iconPosition === 'left' && !loading && icon}
       {children}
