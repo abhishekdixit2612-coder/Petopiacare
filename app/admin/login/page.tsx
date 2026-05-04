@@ -26,7 +26,6 @@ export default function AdminLogin() {
         throw new Error('Invalid password');
       }
 
-      // Redirect to dashboard
       router.push('/admin/dashboard');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
@@ -36,9 +35,8 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FAFAFA] to-[#C8E3E2] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-primary-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo */}
         <div className="text-center mb-8">
           <Image
             src="/logos/primary.png"
@@ -47,20 +45,19 @@ export default function AdminLogin() {
             height={60}
             className="mx-auto mb-4"
           />
-          <h1 className="text-2xl font-bold text-gray-900 font-primary">Admin Login</h1>
-          <p className="text-gray-600 mt-2">Access PetopiaCare Admin Control Center</p>
+          <h1 className="font-display text-display-sm font-semibold text-neutral-900">Admin Login</h1>
+          <p className="text-body-md text-neutral-500 mt-2">Access PetopiaCare Admin Control Center</p>
         </div>
 
-        {/* Login Form */}
-        <form onSubmit={handleLogin} className="bg-white rounded-2xl shadow-premium p-8 border border-gray-100">
+        <form onSubmit={handleLogin} className="bg-white rounded-2xl shadow-md p-8 border border-neutral-100">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm font-semibold">
+            <div className="bg-error-50 border border-error-200 text-error-700 px-4 py-3 rounded-lg mb-4 text-body-sm font-semibold">
               {error}
             </div>
           )}
 
           <div className="mb-6">
-            <label htmlFor="password" className="block text-sm font-bold text-gray-700 mb-2">
+            <label htmlFor="password" className="block text-label font-medium text-neutral-700 mb-2">
               Admin Vault Password
             </label>
             <input
@@ -69,7 +66,7 @@ export default function AdminLogin() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••••••••"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1A7D80] focus:border-transparent outline-none transition-premium font-mono"
+              className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-100 focus:border-primary-500 outline-none transition-all font-mono"
               disabled={loading}
               autoFocus
             />
@@ -78,14 +75,13 @@ export default function AdminLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#1A7D80] hover:bg-[#126265] disabled:bg-gray-400 text-white font-bold py-3 px-4 rounded-lg transition-premium shadow-md"
+            className="w-full bg-primary-500 hover:bg-primary-600 disabled:bg-neutral-400 text-white font-bold py-3 px-4 rounded-lg transition-all shadow-md"
           >
             {loading ? 'Authenticating...' : 'Secure Login'}
           </button>
         </form>
 
-        {/* Footer Note */}
-        <p className="text-center text-gray-500 text-sm mt-6">
+        <p className="text-center text-neutral-400 text-label-sm mt-6">
           Authorized personnel only. Sessions expire after 24 hours.
         </p>
       </div>

@@ -10,7 +10,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="admin-root min-h-screen bg-gray-100 font-secondary">
+    <div className="admin-root min-h-screen bg-neutral-100 font-body">
       {children}
     </div>
   );
