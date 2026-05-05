@@ -1,13 +1,32 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, RefreshCw, Check, AlertCircle, Info } from 'lucide-react';
+import { Search, RefreshCw, Check, AlertCircle, Info, Zap } from 'lucide-react';
 import UnsplashImagePicker from '@/components/UnsplashImagePicker';
 import type { UnsplashImage } from '@/types/unsplash';
 import Link from 'next/link';
 
 export default function AdminImagesPage() {
   const [testQuery, setTestQuery] = useState('golden retriever dog');
+  const [migrating, setMigrating] = useState(false);
+  const [migrateResult, setMigrateResult] = useState<{ totalUpdated: number; summary: any[] } | null>(null);
+  const [migrateError, setMigrateError] = useState('');
+
+  const runMigration = async () => {
+    setMigrating(true);
+    setMigrateResult(null);
+    setMigrateError('');
+    try {
+      const res = await fetch('/api/admin/populate-images', { method: 'POST' });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error ?? 'Migration failed');
+      setMigrateResult(data);
+    } catch (err) {
+      setMigrateError(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setMigrating(false);
+    }
+  };
   const [showPicker, setShowPicker] = useState(false);
   const [lastSelected, setLastSelected] = useState<UnsplashImage | null>(null);
   const [testLoading, setTestLoading] = useState(false);
@@ -45,14 +64,12 @@ export default function AdminImagesPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-5xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-6">
           <div>
             <Link href="/admin/dashboard" className="text-sm text-gray-500 hover:text-gray-700 mb-2 block">← Back to Dashboard</Link>
             <h1 className="text-3xl font-bold text-gray-900">Image Management</h1>
             <p className="text-gray-500 mt-1">Unsplash API integration and image search testing</p>
           </div>
-
-          {/* API Status */}
           <div className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium ${
             apiStatus === 'ok' ? 'bg-green-50 border-green-200 text-green-700' :
             apiStatus === 'error' ? 'bg-red-50 border-red-200 text-red-700' :
@@ -61,6 +78,53 @@ export default function AdminImagesPage() {
             {apiStatus === 'ok' ? <Check size={15} /> : apiStatus === 'error' ? <AlertCircle size={15} /> : <Info size={15} />}
             {apiStatus === 'ok' ? 'API Connected' : apiStatus === 'error' ? 'API Error' : 'API Status Unknown'}
           </div>
+        </div>
+
+        {/* ── POPULATE ALL IMAGES (main CTA) ── */}
+        <div className="bg-forest-500 rounded-2xl p-6 mb-6 text-white">
+          <div className="flex flex-col md:flex-row md:items-center gap-5">
+            <div className="flex-1">
+              <h2 className="font-bold text-xl mb-1 flex items-center gap-2">
+                <Zap size={20} className="text-yellow-300" /> Populate All Website Images
+              </h2>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Fetches Unsplash images for all breeds, life stages, health conditions, nutrition guides, and behavior topics in the database.
+                Only fills rows where <code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-xs">image_url</code> is currently empty.
+                Takes ~2 minutes (rate limited to 40 req/min).
+              </p>
+            </div>
+            <div className="flex-shrink-0">
+              <button onClick={runMigration} disabled={migrating}
+                className="flex items-center gap-2.5 bg-primary-500 hover:bg-primary-600 disabled:bg-white/20 disabled:cursor-not-allowed text-white font-bold px-6 py-3.5 rounded-xl transition-colors text-sm whitespace-nowrap">
+                {migrating ? <RefreshCw size={16} className="animate-spin" /> : <Zap size={16} />}
+                {migrating ? 'Fetching images… (please wait)' : 'Run Image Population'}
+              </button>
+            </div>
+          </div>
+
+          {/* Result */}
+          {migrateResult && (
+            <div className="mt-4 bg-white/10 rounded-xl p-4">
+              <p className="font-bold text-green-300 flex items-center gap-2 mb-3">
+                <Check size={16} /> Done! {migrateResult.totalUpdated} images added to database
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                {migrateResult.summary.map((s: any) => (
+                  <div key={s.table} className="text-xs bg-white/10 rounded-lg px-3 py-2">
+                    <span className="font-semibold text-white">{s.table}</span>
+                    <span className="text-white/60 ml-2">+{s.updated} images</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-white/50 text-xs mt-3">Refresh any Learn Hub page to see the new images.</p>
+            </div>
+          )}
+
+          {migrateError && (
+            <div className="mt-4 bg-red-500/20 border border-red-400/30 rounded-xl p-4 text-sm text-red-200">
+              {migrateError}
+            </div>
+          )}
         </div>
 
         {/* Setup instructions */}

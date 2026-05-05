@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Check, X, AlertTriangle } from 'lucide-react';
 import { getNutritionalGuideBySlug, getNutritionalGuides } from '@/lib/learn-queries';
+import { getContentImage } from '@/lib/getPageImage';
 import BreadcrumbNav from '@/components/learn/BreadcrumbNav';
 import ComparisonTable from '@/components/learn/ComparisonTable';
 import type { NutritionCategory } from '@/types/database';
@@ -50,7 +51,10 @@ export default async function NutritionGuidePage({ params }: { params: Promise<{
 
   if (!guide) notFound();
 
-  const related = allGuides.filter((g) => g.slug !== slug && g.category === guide.category).slice(0, 3);
+  const [heroImage, related] = await Promise.all([
+    getContentImage('nutrition', slug),
+    Promise.resolve(allGuides.filter((g) => g.slug !== slug && g.category === guide.category).slice(0, 3)),
+  ]);
   const tableItems = buildQuantitiesTable(guide.quantities_chart as Record<string, unknown>);
 
   return (
@@ -64,8 +68,8 @@ export default async function NutritionGuidePage({ params }: { params: Promise<{
       {/* Hero */}
       <div className="relative rounded-2xl overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?w=1200&q=80"
-          alt={guide.title} className="w-full h-48 md:h-60 object-cover" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={heroImage} alt={guide.title} className="w-full h-48 md:h-60 object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-green-900/90 to-forest-500/70" />
         <div className="absolute inset-0 p-8 md:p-10 flex flex-col justify-end">
           <span className="inline-block bg-white/20 text-white text-label-sm font-semibold px-3 py-1 rounded-full mb-3 w-fit">

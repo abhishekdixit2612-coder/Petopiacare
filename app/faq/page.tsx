@@ -1,18 +1,21 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { getPageImage } from '@/lib/getPageImage';
 
 export const metadata = {
   title: 'FAQ | PetopiaCare',
   description: 'Frequently asked questions about shipping, returns, products, and pet care support at PetopiaCare.',
 };
 
-export default function FAQPage() {
+export default async function FAQPage() {
+  const heroImg = await getPageImage('dog curious question tilt head', 'default');
+
   return (
     <main className="bg-neutral-50 min-h-screen">
       {/* Hero */}
       <section className="relative bg-forest-500 py-20 overflow-hidden mb-14">
         <div className="absolute inset-0">
-          <Image src="https://images.unsplash.com/photo-1560807707-8cc77767d783?w=1400&q=80"
+          <Image src={heroImg}
             alt="Dog being cared for" fill className="object-cover opacity-20" unoptimized priority />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">

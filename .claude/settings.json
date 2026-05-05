@@ -4,7 +4,13 @@
       "Bash(git commit -m ' *)",
       "Bash(git commit -m 'Fix footer: forest green \\(#1E3A2F\\) to match header and brand guidelines *)",
       "Bash(pkill -f \"next dev\")",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(kill 9984)",
+      "Bash(curl -s 'https://ftvaewmvghxkhwjgishc.supabase.co/rest/v1/dog_breeds?select=name,image_url&is_published=eq.true&limit=3' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dmFld212Z2h4a2h3amdpc2hjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNjYyNzUsImV4cCI6MjA5MDk0MjI3NX0.DbGgp_6xXBhpCYOpoBJ7XIWEjYafPMKgEskyt0N309Y' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dmFld212Z2h4a2h3amdpc2hjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNjYyNzUsImV4cCI6MjA5MDk0MjI3NX0.DbGgp_6xXBhpCYOpoBJ7XIWEjYafPMKgEskyt0N309Y')",
+      "Bash(python3 -m json.tool)",
+      "Bash(sed -i '' 's|src=\"https://images.unsplash.com/photo-1552053831-71594a27632d?w=1400\\\\&q=80\"|src={heroImg}|g' /Users/abhishekdixit/Documents/Petopia/Petopiacare.in/app/about/page.tsx)",
+      "Bash(sed -i '' 's|src=\"https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800\\\\&q=80\"|src={missionImg}|g' /Users/abhishekdixit/Documents/Petopia/Petopiacare.in/app/about/page.tsx)",
+      "Bash(sed -i '' 's|src=\"https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=1400\\\\&q=80\"|src={ctaImg}|g' /Users/abhishekdixit/Documents/Petopia/Petopiacare.in/app/about/page.tsx)"
     ]
   }
 }

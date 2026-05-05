@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Check, X, ShoppingBag, Activity, Scissors, Heart, Clock } from 'lucide-react';
 import { getBreedBySlug, getRelatedBreeds } from '@/lib/learn-queries';
+import { getContentImage } from '@/lib/getPageImage';
 import BreadcrumbNav from '@/components/learn/BreadcrumbNav';
 import BreedCard from '@/components/learn/BreedCard';
 
@@ -48,7 +49,10 @@ export default async function BreedPage({ params }: { params: Promise<{ slug: st
   const breed = await getBreedBySlug(slug);
   if (!breed) notFound();
 
-  const relatedBreeds = await getRelatedBreeds(slug, breed.size);
+  const [relatedBreeds, heroImage] = await Promise.all([
+    getRelatedBreeds(slug, breed.size),
+    breed.image_url ? Promise.resolve(breed.image_url) : getContentImage('breed', slug),
+  ]);
 
   return (
     <div className="space-y-8">
@@ -60,12 +64,8 @@ export default async function BreedPage({ params }: { params: Promise<{ slug: st
 
       {/* Hero */}
       <div className="relative rounded-2xl overflow-hidden bg-neutral-100 h-64 md:h-80">
-        {breed.image_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={breed.image_url} alt={breed.name} className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-7xl">🐕</div>
-        )}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={heroImage} alt={breed.name} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
           <div>
             <span className="inline-block bg-white/20 text-white text-label-sm px-3 py-1 rounded-full mb-2">

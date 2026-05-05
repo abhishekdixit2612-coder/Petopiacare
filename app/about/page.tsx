@@ -1,20 +1,27 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Heart, Shield, Users, Leaf } from 'lucide-react';
+import { getPageImage } from '@/lib/getPageImage';
 
 export const metadata = {
   title: 'About PetopiaCare | Pet Products & Education',
   description: "Learn about PetopiaCare - India's trusted source for premium dog products and expert pet care education.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [heroImg, missionImg, ctaImg] = await Promise.all([
+    getPageImage('happy dog owner family india outdoor', 'default'),
+    getPageImage('dog harness collar india premium', 'breed'),
+    getPageImage('dog leash walking park india', 'default'),
+  ]);
+
   return (
     <main>
       {/* Hero */}
       <section className="relative bg-forest-500 py-24 overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=1400&q=80"
+            src={heroImg}
             alt="Happy dog with owner"
             fill
             className="object-cover opacity-25"
@@ -61,7 +68,7 @@ export default function AboutPage() {
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80"
+                src={missionImg}
                 alt="Happy dog wearing PetopiaCare harness"
                 fill
                 className="object-cover"
@@ -153,7 +160,7 @@ export default function AboutPage() {
       <section className="relative bg-forest-500 text-white py-20 overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=1400&q=80"
+            src={ctaImg}
             alt="Dog on leash"
             fill className="object-cover opacity-20" unoptimized
           />

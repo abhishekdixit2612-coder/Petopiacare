@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { AlertTriangle, ShieldCheck, ShoppingBag, ArrowRight } from 'lucide-react';
 import { getHealthConditionBySlug, getAllHealthConditions } from '@/lib/learn-queries';
+import { getContentImage } from '@/lib/getPageImage';
 import BreadcrumbNav from '@/components/learn/BreadcrumbNav';
 import DoAndDontsList from '@/components/learn/DoAndDontsList';
 
@@ -30,8 +31,9 @@ export default async function HealthConditionPage({ params }: { params: Promise<
     getHealthConditionBySlug(slug),
     getAllHealthConditions(),
   ]);
-
   if (!condition) notFound();
+  const heroImage = await getContentImage('health', slug);
+
 
   const cfg = SEVERITY_CONFIG[condition.severity] ?? SEVERITY_CONFIG.mild;
   const related = allConditions.filter((c) => c.slug !== slug).slice(0, 4);
@@ -56,8 +58,8 @@ export default async function HealthConditionPage({ params }: { params: Promise<
       {/* Hero */}
       <div className="relative rounded-2xl overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=1200&q=80"
-          alt={condition.name} className="w-full h-52 md:h-64 object-cover" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={heroImage} alt={condition.name} className="w-full h-52 md:h-64 object-cover" />
         <div className={`absolute inset-0 bg-gradient-to-br ${cfg.hero} opacity-90`} />
         <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end">
           <span className="inline-block bg-white/20 text-white text-label-sm font-semibold px-3 py-1 rounded-full mb-4 w-fit">

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ShoppingBag, ArrowRight, ExternalLink } from 'lucide-react';
 import { getBehavioralTopicBySlug, getAllBehavioralTopics } from '@/lib/learn-queries';
+import { getContentImage } from '@/lib/getPageImage';
 import BreadcrumbNav from '@/components/learn/BreadcrumbNav';
 import DoAndDontsList from '@/components/learn/DoAndDontsList';
 import type { DoAndDonts, ExternalResources } from '@/types/database';
@@ -28,7 +29,10 @@ export default async function BehaviorTopicPage({ params }: { params: Promise<{ 
 
   if (!topic) notFound();
 
-  const related = allTopics.filter((t) => t.slug !== slug).slice(0, 4);
+  const [heroImage, related] = await Promise.all([
+    getContentImage('behavior', slug),
+    Promise.resolve(allTopics.filter((t) => t.slug !== slug).slice(0, 4)),
+  ]);
   const doAndDonts = topic.do_and_donts as DoAndDonts | null;
   const resources = topic.external_resources as ExternalResources | null;
 
@@ -43,8 +47,8 @@ export default async function BehaviorTopicPage({ params }: { params: Promise<{ 
       {/* Hero */}
       <div className="relative rounded-2xl overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="https://images.unsplash.com/photo-1534361960057-19f4434a4f0a?w=1200&q=80"
-          alt={topic.name} className="w-full h-52 md:h-64 object-cover" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={heroImage} alt={topic.name} className="w-full h-52 md:h-64 object-cover" />
         <div className="absolute inset-0 bg-gradient-to-br from-amber-800/90 to-orange-600/80" />
         <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end">
           <div className="flex flex-wrap gap-2 mb-3">
