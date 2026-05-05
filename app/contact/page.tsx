@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
 import { Button } from '@/components/Button';
+import Image from 'next/image';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
@@ -33,11 +34,18 @@ export default function ContactPage() {
   return (
     <main>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-50 via-white to-primary-100 py-20">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <span className="inline-block text-label font-medium text-primary-600 uppercase tracking-widest mb-4">We&apos;d love to hear from you</span>
-          <h1 className="text-display-md font-display text-neutral-900 mb-4">Get in Touch</h1>
-          <p className="text-body-lg text-neutral-600">Have questions? We&apos;re here to help. Reach out anytime.</p>
+      <section className="relative bg-forest-500 py-24 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1583512603805-3cc6b41f3edb?w=1400&q=80"
+            alt="Dog looking up at owner"
+            fill className="object-cover opacity-20" unoptimized priority
+          />
+        </div>
+        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+          <span className="inline-block text-primary-400 font-bold uppercase tracking-[0.12em] text-[11px] mb-4">We&apos;d love to hear from you</span>
+          <h1 className="font-display font-bold italic text-white text-display-md md:text-display-lg mb-4">Get in Touch</h1>
+          <p className="text-body-lg text-white/70">Have questions? We&apos;re here to help. Reach out anytime.</p>
         </div>
       </section>
 

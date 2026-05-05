@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export const metadata = {
   title: 'FAQ | PetopiaCare',
@@ -7,15 +8,23 @@ export const metadata = {
 
 export default function FAQPage() {
   return (
-    <main className="bg-neutral-50 min-h-screen py-20">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
-          <span className="inline-block text-label font-medium text-primary-600 uppercase tracking-widest mb-4">Support</span>
-          <h1 className="text-display-md font-display text-neutral-900 mb-4">Frequently Asked Questions</h1>
-          <p className="text-body-lg text-neutral-600 max-w-2xl mx-auto">
-            Quick answers to common questions about orders, shipping, returns, digital products, and pet care support.
+    <main className="bg-neutral-50 min-h-screen">
+      {/* Hero */}
+      <section className="relative bg-forest-500 py-20 overflow-hidden mb-14">
+        <div className="absolute inset-0">
+          <Image src="https://images.unsplash.com/photo-1560807707-8cc77767d783?w=1400&q=80"
+            alt="Dog being cared for" fill className="object-cover opacity-20" unoptimized priority />
+        </div>
+        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+          <span className="inline-block text-primary-400 font-bold uppercase tracking-[0.12em] text-[11px] mb-4">Support</span>
+          <h1 className="font-display font-bold italic text-white text-display-md md:text-display-lg mb-4">Frequently Asked Questions</h1>
+          <p className="text-body-lg text-white/70 max-w-2xl mx-auto">
+            Quick answers about orders, shipping, returns, digital products, and pet care support.
           </p>
         </div>
+      </section>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <div className="sr-only">FAQ content below</div>
 
         <div className="grid gap-6 md:grid-cols-2">
           {[
@@ -73,5 +82,6 @@ export default function FAQPage() {
         </div>
       </div>
     </main>
+
   );
 }

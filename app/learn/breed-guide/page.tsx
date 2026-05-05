@@ -18,14 +18,21 @@ export default async function BreedGuidePage() {
       <BreadcrumbNav items={[{ label: 'Learn', href: '/learn' }, { label: 'Breed Guide' }]} />
 
       {/* Hero */}
-      <div className="bg-gradient-to-r from-primary-50 to-blue-50 border border-primary-100 rounded-2xl p-6 md:p-10">
-        <h1 className="font-display font-bold text-display-sm md:text-display-md text-neutral-900 mb-3">
-          Find Your Perfect Breed
-        </h1>
-        <p className="text-body-lg text-neutral-600 max-w-xl">
-          Explore detailed guides for every breed popular in India — from exercise needs to grooming,
-          training difficulty, and suitability for Indian climate and apartments.
-        </p>
+      <div className="relative rounded-2xl overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=1200&q=80"
+          alt="Dogs of different breeds" className="w-full h-56 md:h-72 object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-forest-500/90 to-forest-500/60 flex items-center p-8 md:p-12">
+          <div>
+            <h1 className="font-display font-bold italic text-white text-display-sm md:text-display-md mb-3">
+              Find Your Perfect Breed
+            </h1>
+            <p className="text-white/80 text-body-lg max-w-xl">
+              Explore guides for every breed popular in India — exercise needs, grooming,
+              training difficulty, and suitability for Indian climate and apartments.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Filters + grid (client component) */}

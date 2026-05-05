@@ -72,14 +72,20 @@ export default async function LifeStagePage({ params }: { params: Promise<{ slug
       ]} />
 
       {/* Hero */}
-      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-blue-600 to-primary-700 p-8 md:p-12 text-white">
-        <span className="inline-block bg-white/20 text-white text-label-sm px-3 py-1 rounded-full mb-3">
-          {stage.age_range}
-        </span>
-        <h1 className="font-display font-bold text-display-md mb-3">{stage.name}</h1>
-        {stage.behavioral_characteristics && (
-          <p className="text-blue-100 text-body-lg max-w-xl leading-relaxed">{stage.behavioral_characteristics}</p>
-        )}
+      <div className="relative rounded-2xl overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={stage.image_url ?? 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1200&q=80'}
+          alt={stage.name} className="w-full h-56 md:h-72 object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-800/90 to-forest-500/70" />
+        <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end">
+          <span className="inline-block bg-white/20 text-white text-label-sm px-3 py-1 rounded-full mb-3 w-fit">
+            {stage.age_range}
+          </span>
+          <h1 className="font-display font-bold italic text-white text-display-sm md:text-display-md mb-3">{stage.name}</h1>
+          {stage.behavioral_characteristics && (
+            <p className="text-white/80 text-body-lg max-w-xl leading-relaxed line-clamp-3">{stage.behavioral_characteristics}</p>
+          )}
+        </div>
       </div>
 
       {/* Nutrition */}

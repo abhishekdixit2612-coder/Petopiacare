@@ -26,17 +26,22 @@ export default async function BehaviorTrainingPage() {
       <BreadcrumbNav items={[{ label: 'Learn', href: '/learn' }, { label: 'Behaviour & Training' }]} />
 
       {/* Hero */}
-      <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-8 md:p-12 text-white">
-        <div className="flex items-start gap-4">
-          <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center flex-shrink-0">
-            <Brain size={28} className="text-white" />
-          </div>
-          <div>
-            <h1 className="font-display font-bold text-display-md mb-3">Behaviour & Training Guide</h1>
-            <p className="text-body-lg text-amber-100 max-w-xl leading-relaxed">
-              Evidence-based solutions for the most common dog behaviour problems in Indian homes.
-              Every technique here uses positive reinforcement — no punishment, no shortcuts.
-            </p>
+      <div className="relative rounded-2xl overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="https://images.unsplash.com/photo-1534361960057-19f4434a4f0a?w=1200&q=80"
+          alt="Dog training" className="w-full h-56 md:h-72 object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-800/90 to-orange-700/70 p-8 md:p-12 flex items-center">
+          <div className="flex items-start gap-4">
+            <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center flex-shrink-0">
+              <Brain size={28} className="text-white" />
+            </div>
+            <div>
+              <h1 className="font-display font-bold italic text-white text-display-sm md:text-display-md mb-3">Behaviour & Training Guide</h1>
+              <p className="text-body-lg text-white/80 max-w-xl leading-relaxed">
+                Evidence-based solutions for the most common dog behaviour problems in Indian homes.
+                Every technique here uses positive reinforcement — no punishment, no shortcuts.
+              </p>
+            </div>
           </div>
         </div>
       </div>

@@ -35,15 +35,20 @@ export default async function NutritionPage() {
       <BreadcrumbNav items={[{ label: 'Learn', href: '/learn' }, { label: 'Nutrition' }]} />
 
       {/* Hero */}
-      <div className="bg-gradient-to-br from-green-600 to-primary-700 rounded-2xl p-8 md:p-12 text-white">
-        <div className="flex items-start gap-4">
+      <div className="relative rounded-2xl overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?w=1200&q=80"
+          alt="Dog food and nutrition" className="w-full h-56 md:h-64 object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-green-800/90 to-forest-500/70 p-8 md:p-12 flex items-center">
+          <div className="flex items-start gap-4">
           <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center flex-shrink-0 text-2xl">🍗</div>
           <div>
-            <h1 className="font-display font-bold text-display-md mb-3">Complete Dog Nutrition Guide</h1>
-            <p className="text-body-lg text-green-100 max-w-xl leading-relaxed">
+            <h1 className="font-display font-bold italic text-white text-display-sm md:text-display-md mb-3">Complete Dog Nutrition Guide</h1>
+            <p className="text-body-lg text-white/80 max-w-xl leading-relaxed">
               Feeding your dog correctly is one of the most impactful things you can do for their health.
               These guides cover everything specific to Indian dogs, ingredients, and budgets.
             </p>
+          </div>
           </div>
         </div>
       </div>

@@ -41,16 +41,22 @@ export default async function BehaviorTopicPage({ params }: { params: Promise<{ 
       ]} />
 
       {/* Hero */}
-      <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-8 md:p-12 text-white">
-        <div className="flex flex-wrap gap-2 mb-4">
-          {topic.applicable_stages?.map((s) => (
-            <span key={s} className="bg-white/20 text-white text-label-sm font-semibold px-3 py-1 rounded-full capitalize">{s}</span>
-          ))}
+      <div className="relative rounded-2xl overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="https://images.unsplash.com/photo-1534361960057-19f4434a4f0a?w=1200&q=80"
+          alt={topic.name} className="w-full h-52 md:h-64 object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-800/90 to-orange-600/80" />
+        <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end">
+          <div className="flex flex-wrap gap-2 mb-3">
+            {topic.applicable_stages?.map((s) => (
+              <span key={s} className="bg-white/20 text-white text-label-sm font-semibold px-3 py-1 rounded-full capitalize">{s}</span>
+            ))}
+          </div>
+          <h1 className="font-display font-bold italic text-white text-display-sm md:text-display-md mb-3 leading-tight">{topic.name}</h1>
+          {topic.issue_description && (
+            <p className="text-white/80 text-body-lg max-w-xl leading-relaxed">{topic.issue_description}</p>
+          )}
         </div>
-        <h1 className="font-display font-bold text-display-md mb-3 leading-tight">{topic.name}</h1>
-        {topic.issue_description && (
-          <p className="text-amber-100 text-body-lg max-w-xl leading-relaxed">{topic.issue_description}</p>
-        )}
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8">

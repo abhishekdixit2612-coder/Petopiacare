@@ -62,14 +62,20 @@ export default async function NutritionGuidePage({ params }: { params: Promise<{
       ]} />
 
       {/* Hero */}
-      <div>
-        <span className="inline-block bg-green-100 text-green-700 text-label-sm font-semibold px-3 py-1 rounded-full mb-4">
-          {CATEGORY_LABEL[guide.category] ?? guide.category}
-        </span>
-        <h1 className="font-display font-bold text-display-md text-neutral-900 mb-4 leading-tight">{guide.title}</h1>
-        {guide.description && (
-          <p className="text-body-lg text-neutral-600 leading-relaxed max-w-2xl">{guide.description}</p>
-        )}
+      <div className="relative rounded-2xl overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?w=1200&q=80"
+          alt={guide.title} className="w-full h-48 md:h-60 object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-green-900/90 to-forest-500/70" />
+        <div className="absolute inset-0 p-8 md:p-10 flex flex-col justify-end">
+          <span className="inline-block bg-white/20 text-white text-label-sm font-semibold px-3 py-1 rounded-full mb-3 w-fit">
+            {CATEGORY_LABEL[guide.category] ?? guide.category}
+          </span>
+          <h1 className="font-display font-bold italic text-white text-display-sm md:text-display-md mb-3 leading-tight">{guide.title}</h1>
+          {guide.description && (
+            <p className="text-white/80 text-body-md leading-relaxed max-w-2xl line-clamp-2">{guide.description}</p>
+          )}
+        </div>
       </div>
 
       {/* Quantities chart */}

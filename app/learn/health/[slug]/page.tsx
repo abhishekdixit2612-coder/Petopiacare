@@ -54,16 +54,20 @@ export default async function HealthConditionPage({ params }: { params: Promise<
       ]} />
 
       {/* Hero */}
-      <div className={`bg-gradient-to-br ${cfg.hero} rounded-2xl p-8 md:p-12 text-white`}>
-        <div className="flex items-start gap-4">
-          <span className={`inline-block bg-white/20 text-white text-label-sm font-semibold px-3 py-1 rounded-full mb-4 flex-shrink-0`}>
+      <div className="relative rounded-2xl overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=1200&q=80"
+          alt={condition.name} className="w-full h-52 md:h-64 object-cover" />
+        <div className={`absolute inset-0 bg-gradient-to-br ${cfg.hero} opacity-90`} />
+        <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end">
+          <span className="inline-block bg-white/20 text-white text-label-sm font-semibold px-3 py-1 rounded-full mb-4 w-fit">
             {cfg.label}
           </span>
+          <h1 className="font-display font-bold italic text-white text-display-sm md:text-display-md mb-3 leading-tight">{condition.name}</h1>
+          {condition.description && (
+            <p className="text-white/85 text-body-lg max-w-xl leading-relaxed">{condition.description}</p>
+          )}
         </div>
-        <h1 className="font-display font-bold text-display-md mb-3 leading-tight">{condition.name}</h1>
-        {condition.description && (
-          <p className="text-white/90 text-body-lg max-w-xl leading-relaxed">{condition.description}</p>
-        )}
       </div>
 
       {/* Emergency banner for severe conditions */}

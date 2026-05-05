@@ -60,12 +60,19 @@ export default async function HealthWellnessPage() {
       <BreadcrumbNav items={[{ label: 'Learn', href: '/learn' }, { label: 'Health & Wellness' }]} />
 
       {/* Hero */}
-      <div className="bg-gradient-to-br from-rose-600 to-primary-700 rounded-2xl p-8 md:p-12 text-white">
-        <h1 className="font-display font-bold text-display-md mb-3">Health & Wellness Guide</h1>
-        <p className="text-body-lg text-rose-100 max-w-xl leading-relaxed">
-          Know the signs, understand the risks, and learn how to prevent the most common diseases
-          affecting dogs in India — from tick fever to heat stroke.
-        </p>
+      <div className="relative rounded-2xl overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?w=1200&q=80"
+          alt="Dog at vet" className="w-full h-56 md:h-72 object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-rose-800/90 to-forest-500/70 p-8 md:p-12 flex items-center">
+          <div>
+            <h1 className="font-display font-bold italic text-white text-display-sm md:text-display-md mb-3">Health & Wellness Guide</h1>
+            <p className="text-body-lg text-white/80 max-w-xl leading-relaxed">
+              Know the signs, understand the risks, and learn how to prevent the most common diseases
+              affecting dogs in India — from tick fever to heat stroke.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Emergency warning */}
