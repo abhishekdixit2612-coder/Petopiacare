@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import type { RelatedContentProps, ContentType } from '@/types/components';
 
 const TYPE_CONFIG: Record<ContentType, { label: string; badge: string; path: string }> = {
-  breed:     { label: 'Breed',     badge: 'bg-purple-100 text-purple-700', path: '/learn/breeds' },
+  breed:     { label: 'Breed',     badge: 'bg-purple-100 text-purple-700', path: '/learn/breed-guide' },
   health:    { label: 'Health',    badge: 'bg-error-100 text-error-700',   path: '/learn/health' },
   nutrition: { label: 'Nutrition', badge: 'bg-success-100 text-success-700', path: '/learn/nutrition' },
   behavior:  { label: 'Behavior',  badge: 'bg-blue-100 text-blue-700',     path: '/learn/behavior' },

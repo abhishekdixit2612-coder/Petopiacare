@@ -88,7 +88,7 @@ function BreedCard({ breed, showProducts = false, onProductClick }: BreedCardPro
         {/* Actions */}
         <div className="mt-auto flex flex-col gap-2">
           <Link
-            href={`/learn/breeds/${breed.slug}`}
+            href={`/learn/breed-guide/${breed.slug}`}
             className="w-full text-center bg-primary-500 hover:bg-primary-600 text-white text-body-sm font-medium py-2 rounded-lg transition-colors"
           >
             Learn More
