@@ -3,8 +3,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { ArrowLeft, Send } from 'lucide-react';
+import { ArrowLeft, Send, Image as ImageIcon, Search, X } from 'lucide-react';
 import Link from 'next/link';
+import UnsplashImagePicker from '@/components/UnsplashImagePicker';
+import type { UnsplashImage } from '@/types/unsplash';
+import { getSearchQuery } from '@/config/imageSearchMapping';
 
 export default function WriteBlogPost() {
   const router = useRouter();
@@ -22,6 +25,31 @@ export default function WriteBlogPost() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showImagePicker, setShowImagePicker] = useState(false);
+  const [selectedUnsplashImage, setSelectedUnsplashImage] = useState<UnsplashImage | null>(null);
+
+  const handleUnsplashSelect = (image: UnsplashImage) => {
+    setSelectedUnsplashImage(image);
+    setFormData(prev => ({ ...prev, featured_image: image.urls.regular }));
+    setShowImagePicker(false);
+  };
+
+  const clearImage = () => {
+    setSelectedUnsplashImage(null);
+    setFormData(prev => ({ ...prev, featured_image: '' }));
+  };
+
+  // Auto-generate Unsplash search query from blog title
+  const getAutoSearchQuery = () => {
+    const cat = formData.category;
+    const title = formData.title;
+    if (cat) {
+      const mapped = getSearchQuery('blog', cat);
+      if (mapped !== 'dog pet india') return mapped;
+    }
+    if (title.trim()) return title.trim().toLowerCase().replace(/[^a-z0-9\s]/g, '').slice(0, 50);
+    return 'dog india pet';
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -196,15 +224,55 @@ export default function WriteBlogPost() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Featured Hero Image URL</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Featured Hero Image</label>
+
+                {/* Image preview */}
+                {formData.featured_image && (
+                  <div className="relative mb-3 rounded-xl overflow-hidden h-40 bg-neutral-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={formData.featured_image} alt="Featured" className="w-full h-full object-cover" />
+                    <button onClick={clearImage}
+                      className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-1.5 rounded-lg transition-colors">
+                      <X size={14} />
+                    </button>
+                    {selectedUnsplashImage && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[10px] px-3 py-1.5">
+                        Photo by {selectedUnsplashImage.user.name} on Unsplash
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Two options: Unsplash picker or manual URL */}
+                <div className="flex gap-2 mb-2">
+                  <button type="button" onClick={() => setShowImagePicker(true)}
+                    className="flex items-center gap-2 bg-forest-500 hover:bg-forest-600 text-white text-sm font-bold px-4 py-2.5 rounded-xl transition-colors flex-1 justify-center">
+                    <Search size={15} /> Search Unsplash
+                  </button>
+                  <button type="button" onClick={() => setShowImagePicker(false)}
+                    className="flex items-center gap-2 border border-gray-300 text-gray-600 hover:border-gray-400 text-sm font-medium px-4 py-2.5 rounded-xl transition-colors">
+                    <ImageIcon size={15} /> URL
+                  </button>
+                </div>
+
                 <input
                   type="url"
                   name="featured_image"
                   value={formData.featured_image}
                   onChange={handleChange}
-                  placeholder="https://images.unsplash..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 font-mono text-sm outline-none"
+                  placeholder="Or paste image URL directly..."
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 font-mono text-xs outline-none"
                 />
+
+                {/* Unsplash picker modal */}
+                {showImagePicker && (
+                  <UnsplashImagePicker
+                    searchQuery={getAutoSearchQuery()}
+                    selectedImage={selectedUnsplashImage}
+                    onImageSelect={handleUnsplashSelect}
+                    onClose={() => setShowImagePicker(false)}
+                  />
+                )}
               </div>
             </div>
 
