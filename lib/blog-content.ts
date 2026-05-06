@@ -1,21 +1,26 @@
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import { ArrowLeft, Clock, User, Calendar, ArrowRight } from 'lucide-react';
-import { createClient } from '@supabase/supabase-js';
-import { JsonLd, articleLD, breadcrumbLD } from '@/lib/seo';
-import { BLOG_CONTENT } from '@/lib/blog-content';
+export const BLOG_CONTENT: Record<string, string> = {
 
-export const revalidate = 3600;
-
-// ── Kept for type-checker — remove once Supabase content is live ──
-const FULL_CONTENT: Record<string, string> = {
   'best-dog-food-brands-india': `
+<div class="blog-summary">
+  <p class="blog-summary-title">What You Will Learn</p>
+  <ul>
+    <li>How to decode a dog food label — the first ingredient tells everything</li>
+    <li>The top 5 brands in India ranked for nutrition quality and value</li>
+    <li>Red flags that signal a low-quality product</li>
+    <li>The 10-day transition method that prevents digestive upset</li>
+  </ul>
+</div>
+
 <p>Choosing the right dog food in India is harder than it looks. Supermarket shelves are packed with options, prices range from ₹300 to ₹6,000 per bag, and marketing claims are often misleading. This guide cuts through the noise.</p>
 
 <h2>What Makes a Good Dog Food?</h2>
 <p>Before looking at brands, understand what to look for on the label. The first ingredient listed should be a named protein source — chicken, lamb, fish, or beef. If it says "chicken meal," that's acceptable; "poultry by-product" or "meat and bone meal" are low-quality fillers.</p>
 <p>Look for the AAFCO (Association of American Feed Control Officials) statement or the BIS (Bureau of Indian Standards) certification. These guarantee the food meets minimum nutritional standards for the stated life stage.</p>
+
+<div class="blog-fact">
+  <p class="blog-callout-label">Did You Know</p>
+  <p>Ingredients are listed by weight <em>before cooking</em>. "Chicken" listed first may shrink to less than 10% of the dry weight after moisture is removed. <strong>This is why "chicken meal" as a first ingredient is often more protein-dense</strong> — it's already been dried and concentrated before being added.</p>
+</div>
 
 <h2>Top Dog Food Brands Available in India (2026)</h2>
 
@@ -38,31 +43,59 @@ const FULL_CONTENT: Record<string, string> = {
 <p>Several Indian brands have improved dramatically: <strong>Chappi</strong> (budget-friendly, widely available), <strong>Arden Grange</strong> (UK-sourced, sold in India), and <strong>Acana</strong> (available via importers). Always check the manufacturing date — imported foods sometimes sit in warehouses for months in Indian heat.</p>
 
 <h2>How Much to Feed</h2>
-<p>The feeding guide on the packaging is a starting point, not a rule. Every dog is different. A general formula: feed 2-3% of your dog's target body weight per day. Adjust based on body condition — you should be able to feel the ribs but not see them.</p>
+<p>The feeding guide on the packaging is a starting point, not a rule. Every dog is different. A general formula: feed 2–3% of your dog's target body weight per day. Adjust based on body condition — you should be able to feel the ribs but not see them.</p>
 
 <h2>Red Flags to Avoid</h2>
 <ul>
 <li>First ingredient is corn, wheat, or soy</li>
-<li>No AAFCO or BIS statement</li>
-<li>Artificial preservatives: BHA, BHT, ethoxyquin</li>
+<li>No AAFCO or BIS statement on the bag</li>
+<li>Artificial preservatives: BHA, BHT, or ethoxyquin</li>
 <li>Vague protein sources: "animal digest," "meat meal"</li>
 <li>No manufacturing date or short shelf life remaining</li>
 </ul>
 
+<div class="blog-warning">
+  <p class="blog-callout-label">Watch Out</p>
+  <p>Never buy dog food in a torn, punctured, or resealed bag. Exposure to air, moisture, and Indian heat triggers rancidity in fats — rancid food causes vomiting, diarrhoea, and over time, serious nutritional deficiencies. When in doubt, smell the food before opening a fresh bag. It should smell like meat, not sour or chemical.</p>
+</div>
+
 <h2>Transition Slowly</h2>
 <p>Always switch foods over 10 days: 25% new + 75% old for days 1–3, 50/50 for days 4–6, 75% new for days 7–9, then 100% new from day 10. Abrupt switches cause digestive upset in most dogs.</p>
 
-<p>The best dog food is the one your dog digests well, enjoys eating, maintains a healthy weight on, and that fits your budget consistently. An expensive food fed inconsistently is worse than a mid-range food fed reliably.</p>
+<div class="blog-tip">
+  <p class="blog-callout-label">Pro Tip</p>
+  <p>If your dog refuses a new food, try adding a tablespoon of warm water and letting it sit for two minutes. The heat releases the aroma and makes unfamiliar food far more appealing. Most dogs accept new foods within 3–5 days with this approach.</p>
+</div>
+
+<div class="blog-takeaway">
+  <p class="blog-takeaway-title">Bottom Line</p>
+  <p>The best dog food is the one your dog <strong>digests well, maintains a healthy weight on</strong>, and that fits your budget consistently. An expensive food fed inconsistently beats a premium food your dog refuses. Pick one brand, transition slowly, and monitor coat quality, energy, and stool firmness — those three things tell you everything you need to know.</p>
+</div>
 `,
 
   'homemade-dog-food-recipe-indian-dogs': `
+<div class="blog-summary">
+  <p class="blog-summary-title">Before You Start</p>
+  <ul>
+    <li>Homemade food can be excellent — but only with the right balance of nutrients</li>
+    <li>A veterinary supplement powder is non-negotiable, not optional</li>
+    <li>Three complete recipes using Indian kitchen ingredients</li>
+    <li>A complete list of foods that are toxic to dogs — many surprise Indian families</li>
+  </ul>
+</div>
+
 <p>Many Indian families prefer feeding their dogs home-cooked food. It can be nutritious and cost-effective — but it requires more planning than opening a bag of kibble. Here is a complete guide.</p>
 
 <h2>Is Homemade Food Good for Dogs?</h2>
 <p>Yes, if done correctly. The key word is "correctly." Homemade diets are almost universally deficient in calcium, zinc, Vitamin D, and Vitamin B12 unless you add a veterinary-recommended supplement powder. This is non-negotiable — deficiencies develop slowly and cause serious long-term damage.</p>
 
+<div class="blog-warning">
+  <p class="blog-callout-label">Critical</p>
+  <p>Dogs fed homemade food without a calcium supplement develop weakened bones within months. You will not see it happening — the symptoms (joint pain, fractures, dental problems) appear only after significant damage has occurred. Products like <strong>Pet-Cal, Drools Calcium Supplement, or Himalaya Boniheal</strong> are available at every pet shop and cost less than ₹300 per month.</p>
+</div>
+
 <h2>Safe Indian Ingredients</h2>
-<h3>Proteins (should be 50-60% of the meal):</h3>
+<h3>Proteins (50–60% of the meal):</h3>
 <ul>
 <li>Boiled chicken (boneless, no skin, no salt)</li>
 <li>Boiled eggs (whole egg, including yolk)</li>
@@ -72,7 +105,7 @@ const FULL_CONTENT: Record<string, string> = {
 <li>Cooked lentils — dal (must be well-cooked, no spices)</li>
 </ul>
 
-<h3>Carbohydrates (30-40% of the meal):</h3>
+<h3>Carbohydrates (30–40% of the meal):</h3>
 <ul>
 <li>Cooked brown rice</li>
 <li>Cooked sweet potato</li>
@@ -80,15 +113,15 @@ const FULL_CONTENT: Record<string, string> = {
 <li>Cooked quinoa</li>
 </ul>
 
-<h3>Vegetables (10-15%):</h3>
+<h3>Vegetables (10–15%):</h3>
 <ul>
 <li>Boiled carrots</li>
 <li>Boiled green beans</li>
 <li>Boiled peas</li>
-<li>Spinach (small amounts)</li>
+<li>Spinach (small amounts only)</li>
 </ul>
 
-<h2>Recipe 1: Basic Chicken & Rice (Daily Staple)</h2>
+<h2>Recipe 1: Basic Chicken &amp; Rice (Daily Staple)</h2>
 <p><strong>Ingredients for one day (15kg dog):</strong></p>
 <ul>
 <li>200g boiled chicken (no salt, no oil)</li>
@@ -99,7 +132,12 @@ const FULL_CONTENT: Record<string, string> = {
 </ul>
 <p><strong>Instructions:</strong> Boil chicken until fully cooked. Remove all bones. Mix with rice and vegetables at room temperature. Add supplement. Divide into 2 equal meals. Store up to 3 days refrigerated.</p>
 
-<h2>Recipe 2: Fish & Sweet Potato (Omega-3 Boost)</h2>
+<div class="blog-tip">
+  <p class="blog-callout-label">Time-Saver</p>
+  <p>Batch-cook for the week on Sunday — boil a large pot of chicken, rice, and vegetables separately, then portion and refrigerate up to 3 days or freeze for up to a month. Thaw overnight in the fridge before serving. This makes homemade feeding genuinely sustainable for busy families.</p>
+</div>
+
+<h2>Recipe 2: Fish &amp; Sweet Potato (Omega-3 Boost)</h2>
 <p><strong>Ingredients:</strong></p>
 <ul>
 <li>150g boiled sardines or rohu (boneless)</li>
@@ -109,32 +147,53 @@ const FULL_CONTENT: Record<string, string> = {
 </ul>
 <p>Excellent for coat health and brain development. Rotate with Recipe 1 weekly.</p>
 
-<h2>Recipe 3: Egg & Dal (Budget-Friendly)</h2>
+<h2>Recipe 3: Egg &amp; Dal (Budget-Friendly)</h2>
 <p>For families managing costs: 3 boiled eggs + 100g well-cooked moong dal + 100g rice + 50g vegetables. Add paneer (30g) for extra protein. Must add supplement powder — lentil-based diets are especially low in calcium and Vitamin B12.</p>
 
 <h2>NEVER Include These</h2>
 <ul>
 <li><strong>Onion and garlic</strong> — destroy red blood cells, even in small amounts</li>
 <li><strong>Grapes and raisins</strong> — cause acute kidney failure</li>
-<li><strong>Salt, spices, oil</strong> — keep all cooking plain</li>
-<li><strong>Cooked bones of any kind</strong> — splinter risk, choking hazard</li>
+<li><strong>Salt, spices, oil</strong> — keep all cooking completely plain</li>
+<li><strong>Cooked bones of any kind</strong> — splinter and choke hazard</li>
 <li><strong>Jaggery, sugar, mithai</strong> — obesity and dental disease</li>
 <li><strong>Maida, bread, biscuits</strong> — empty calories, blood sugar spikes</li>
 </ul>
 
-<h2>The Non-Negotiable Supplement</h2>
-<p>Products like Pet-Cal, Drools Calcium Supplement, or Himalaya Boniheal are available at pet shops and online. Follow the dosage on the packaging based on your dog's weight. Without this, homemade diets cause nutritional deficiencies within months — often invisible until significant damage has occurred.</p>
+<div class="blog-fact">
+  <p class="blog-callout-label">Surprising Fact</p>
+  <p>Onion and garlic toxicity is <em>cumulative</em> — small amounts fed regularly over weeks are just as dangerous as a single large dose. Many Indian families unknowingly give dogs dal or sabzi cooked with onion and garlic, causing chronic low-level anaemia. <strong>All food for dogs must be cooked separately, with no added spices or aromatics.</strong></p>
+</div>
 
 <h2>How Much to Feed</h2>
-<p>Feed 2-3% of your dog's target body weight daily, split into 2 meals for adults and 3-4 meals for puppies. A 15kg adult dog needs approximately 300-450g of food per day. Adjust based on weight changes — weigh monthly.</p>
+<p>Feed 2–3% of your dog's target body weight daily, split into 2 meals for adults and 3–4 meals for puppies. A 15kg adult dog needs approximately 300–450g of food per day. Adjust based on weight changes — weigh monthly.</p>
+
+<div class="blog-takeaway">
+  <p class="blog-takeaway-title">Bottom Line</p>
+  <p>Homemade dog food done right is genuinely excellent — fresher ingredients, no preservatives, and tailored to your dog's needs. Done wrong, it causes slow-building nutritional deficiencies that are expensive to treat. The difference is simple: <strong>add a veterinary supplement powder, never add onion or garlic, and rotate proteins weekly.</strong> Do those three things and you're set.</p>
+</div>
 `,
 
   'stop-dog-pulling-on-leash': `
+<div class="blog-summary">
+  <p class="blog-summary-title">What This Guide Covers</p>
+  <ul>
+    <li>Why dogs pull — and why punishment makes it worse</li>
+    <li>The right equipment that manages pulling while you train</li>
+    <li>Two techniques that work for every breed and age</li>
+    <li>A realistic timeline for what to expect week by week</li>
+  </ul>
+</div>
+
 <p>Leash pulling is one of the most physically challenging behaviour problems in dogs — and one of the most common reasons people give up walking their dogs regularly. A 30kg Labrador pulling can cause genuine injuries in owners of any age. Here is how to fix it.</p>
 
 <h2>Why Dogs Pull on Leash</h2>
 <p>Dogs pull because nobody taught them not to. The walk is exciting — smells, sights, other dogs — and forward momentum is their natural response to that excitement. Every time they pulled and you followed, they learned: pulling = forward movement. The habit was trained, not chosen.</p>
-<p>Dogs do not pull to dominate you. Pulling is an excitement behaviour, not a dominance behaviour. Understanding this changes how you approach the solution.</p>
+
+<div class="blog-fact">
+  <p class="blog-callout-label">Key Insight</p>
+  <p>Dogs do not pull to dominate you. Pulling is a excitement behaviour, not a dominance behaviour. This distinction matters enormously — because if you respond with force or correction, you are adding tension to an already excited dog, which makes walking <em>worse</em>, not better. Understanding this changes everything about how you solve it.</p>
+</div>
 
 <h2>The Equipment Matters First</h2>
 <p>Before training, get the right equipment. A collar and standard leash gives the dog maximum leverage against your arm. Consider:</p>
@@ -154,11 +213,13 @@ const FULL_CONTENT: Record<string, string> = {
 </ol>
 <p>The first few sessions will be frustrating — you may only cover 50 metres in 20 minutes. That is normal. Within 2–3 weeks of consistent application, most dogs show significant improvement.</p>
 
+<div class="blog-tip">
+  <p class="blog-callout-label">Pro Tip</p>
+  <p>Carry high-value treats (chicken pieces, cheese) and reward your dog every 3–5 steps when walking on a loose leash. Don't wait for the pulling to correct — instead, <strong>catch them being good</strong> and make that the most rewarding part of the walk. Dogs repeat what gets rewarded.</p>
+</div>
+
 <h2>Change Direction Method</h2>
 <p>When the dog pulls forward, turn 180° without warning and walk the other way. No words, no corrections. The dog learns that pulling means going backwards, not forwards. Combine with "Be a Tree" for faster results.</p>
-
-<h2>Reward Frequently for Loose Leash</h2>
-<p>Do not wait for problems. Every 3–5 steps of walking on a loose leash, say "Yes!" and give a small treat. Gradually increase the distance between rewards as the dog improves. Make walking calmly on leash the most rewarding thing that happens on a walk.</p>
 
 <h2>Common Mistakes</h2>
 <ul>
@@ -169,15 +230,50 @@ const FULL_CONTENT: Record<string, string> = {
 <li>Different rules for different family members</li>
 </ul>
 
+<div class="blog-warning">
+  <p class="blog-callout-label">The Rule That Matters Most</p>
+  <p>Consistency across every family member is non-negotiable. If one person allows pulling and another doesn't, the dog learns that <em>pulling sometimes works</em> — which is the most powerful reinforcement schedule in behavioural science. Every single walk, every single person must apply the same rules. One inconsistent walk undoes three consistent ones.</p>
+</div>
+
 <h2>Timeline for Results</h2>
 <p>With daily consistent training: noticeable improvement in 2–4 weeks, reliable loose-leash walking in 6–10 weeks for most dogs. Strong pullers or dogs with long-established habits may take 3–4 months. Patience and absolute consistency are the only required ingredients.</p>
+
+<div class="blog-takeaway">
+  <p class="blog-takeaway-title">Bottom Line</p>
+  <p>Loose-leash walking is a trained skill, not a natural behaviour — it requires teaching, not correcting. Get a front-clip harness, apply the Be a Tree method on every single walk, reward heavily for slack leash, and give it 6–8 weeks. <strong>There is no dog that cannot learn this — only handlers who give up too soon or apply it inconsistently.</strong></p>
+</div>
 `,
 
   'summer-dog-care-india': `
+<div class="blog-summary">
+  <p class="blog-summary-title">Summer Safety at a Glance</p>
+  <ul>
+    <li>Heat stroke kills within minutes — learn the signs and emergency response</li>
+    <li>Walk timing, paw protection, and daily hydration routine</li>
+    <li>Breeds most at risk and why</li>
+    <li>What you must never do, even once</li>
+  </ul>
+</div>
+
 <p>India's summers are dangerous for dogs. With temperatures regularly reaching 40–48°C in cities like Delhi, Nagpur, and Ahmedabad, the risks of heat stroke, dehydration, and paw burns are very real. Here is your complete seasonal guide.</p>
 
 <h2>Understanding How Dogs Handle Heat</h2>
 <p>Dogs cannot sweat. They lose heat almost entirely through panting — a much less efficient system than human perspiration. Brachycephalic breeds (Pugs, Shih Tzus, Boxers, Bulldogs) have compressed airways that make panting even less effective, putting them at extreme risk. Thick-coated breeds like Golden Retrievers and Huskies also struggle far more than short-coated breeds like Dobermans.</p>
+
+<div class="blog-stats">
+  <div class="blog-stat">
+    <span class="blog-stat-num">48°C</span>
+    <span class="blog-stat-label">peak air temp in Indian cities</span>
+  </div>
+  <div class="blog-stat">
+    <span class="blog-stat-num">70°C</span>
+    <span class="blog-stat-label">road surface temp in afternoon</span>
+  </div>
+  <div class="blog-stat">
+    <span class="blog-stat-num">7 min</span>
+    <span class="blog-stat-label">to heat stroke in a parked car</span>
+  </div>
+</div>
 
 <h2>Heat Stroke: Recognise and Respond Immediately</h2>
 <p>Heat stroke is a medical emergency that kills within minutes. Know the signs:</p>
@@ -189,7 +285,11 @@ const FULL_CONTENT: Record<string, string> = {
 <li>Confusion, stumbling, weakness</li>
 <li>Collapse or seizures</li>
 </ul>
-<p><strong>Emergency response:</strong> Move the dog to shade or air conditioning immediately. Apply cool (not cold) water to the neck, armpits, groin, and paws. Never use ice — it constricts blood vessels and slows cooling. Fan the dog while keeping it wet. Rush to the vet while cooling continues. Every minute matters.</p>
+
+<div class="blog-warning">
+  <p class="blog-callout-label">Emergency Protocol</p>
+  <p>Move the dog to shade or air conditioning <em>immediately</em>. Apply cool (not cold) water to the neck, armpits, groin, and paws. <strong>Never use ice</strong> — it constricts blood vessels and slows cooling. Fan the dog while keeping it wet. Rush to the vet while cooling continues in the car. Every minute without treatment reduces the dog's chances of survival.</p>
+</div>
 
 <h2>Daily Summer Routines</h2>
 <h3>Exercise timing:</h3>
@@ -207,12 +307,17 @@ const FULL_CONTENT: Record<string, string> = {
 <li>Allow access to cool floor tiles</li>
 </ul>
 
+<div class="blog-tip">
+  <p class="blog-callout-label">Smart Cooling Trick</p>
+  <p>Fill an ice tray with diluted chicken or beef broth and freeze overnight. These frozen broth cubes give dogs a cooling treat they love, slow them down on hot days, and provide electrolytes. It takes two minutes to make and your dog will obsess over them.</p>
+</div>
+
 <h2>The Never-Do-This List</h2>
 <ul>
 <li><strong>Never leave a dog in a parked car</strong> — even for 2 minutes, even with windows cracked. Car interiors reach 70°C within minutes.</li>
 <li><strong>Never walk during afternoon hours</strong> in summer (11 AM–6 PM).</li>
 <li><strong>Never muzzle a dog outside in summer</strong> — muzzles prevent panting, the only cooling mechanism dogs have.</li>
-<li><strong>Never shave a double-coated breed</strong> — their undercoat provides insulation against both cold AND heat.</li>
+<li><strong>Never shave a double-coated breed</strong> — their undercoat provides insulation against both cold and heat.</li>
 </ul>
 
 <h2>Grooming for Summer</h2>
@@ -220,13 +325,33 @@ const FULL_CONTENT: Record<string, string> = {
 
 <h2>Special Considerations for Indian Breeds</h2>
 <p>Indian Pariah Dogs are the most heat-tolerant breed — naturally evolved for the subcontinent. They handle Indian summers far better than imported breeds. If you are considering getting a dog, an INDog is the most sustainable choice for Indian families.</p>
+
+<div class="blog-takeaway">
+  <p class="blog-takeaway-title">Bottom Line</p>
+  <p>Indian summers kill dogs every year — preventably. The rules are simple: <strong>walk only in early morning or evening, keep water constantly available, never leave in a parked car, and know the heat stroke emergency response by heart.</strong> The dogs that suffer are almost always the ones whose owners didn't know the danger was so immediate.</p>
+</div>
 `,
 
   'choosing-safe-dog-harness': `
+<div class="blog-summary">
+  <p class="blog-summary-title">In This Guide</p>
+  <ul>
+    <li>Why a harness is safer than a collar for most dogs</li>
+    <li>Five harness types explained — which works for your situation</li>
+    <li>How to measure and fit correctly (and what "too tight" looks like)</li>
+    <li>Best materials for Indian heat and monsoon conditions</li>
+  </ul>
+</div>
+
 <p>The right harness makes every walk better — for your dog and for you. The wrong one causes rubbing, restricts movement, and in the case of a strong puller, may do more harm than good. Here is how to choose correctly.</p>
 
 <h2>Why a Harness Over a Collar?</h2>
 <p>Collars, especially on dogs that pull, concentrate force on the neck. This can cause tracheal damage in small dogs and neck injuries in persistent large-breed pullers. A harness distributes pressure across the chest and shoulders — a much larger and more robust area. For puppies, dogs with respiratory issues, and consistent pullers, a harness is always safer.</p>
+
+<div class="blog-fact">
+  <p class="blog-callout-label">Vet Finding</p>
+  <p>Studies show that dogs walked on collars who pull show measurable increases in intraocular (eye) pressure — relevant for breeds prone to glaucoma like Shih Tzus, Pugs, and Beagles. A front-clip or back-clip harness eliminates this risk entirely. <strong>For any brachycephalic (flat-faced) breed, a harness is not optional — it's essential.</strong></p>
+</div>
 
 <h2>Types of Harnesses</h2>
 
@@ -247,7 +372,11 @@ const FULL_CONTENT: Record<string, string> = {
 
 <h2>Sizing: Getting It Right</h2>
 <p>Measure your dog's chest girth at the widest point — just behind the front legs. Add 2–3 cm for comfort. Never buy a harness that requires the dog to grow into it — ill-fitting harnesses cause rubbing and restricted movement.</p>
-<p>Test the fit: you should be able to slide two fingers under any strap. The harness should not shift when the dog moves and should not cause any skin folding or rubbing marks after a 15-minute walk.</p>
+
+<div class="blog-tip">
+  <p class="blog-callout-label">Fit Test</p>
+  <p>After putting on the harness, slide two fingers under every strap. <strong>If you can slide two fingers easily — the fit is correct.</strong> If only one finger fits, it's too tight and will cause chafing. If three fingers fit easily, it's too loose and may allow the dog to back out (a common escape method for anxious dogs). Recheck the fit after the first 15-minute walk — straps often need adjustment after the first use.</p>
+</div>
 
 <h2>Material Guide for Indian Conditions</h2>
 <ul>
@@ -257,26 +386,36 @@ const FULL_CONTENT: Record<string, string> = {
 <li><strong>Mesh lining</strong>: Essential in Indian heat — promotes airflow and reduces sweat buildup under the harness.</li>
 </ul>
 
-<h2>How to Fit and Introduce a New Harness</h2>
+<h2>How to Introduce a New Harness</h2>
 <p>Never force a harness on a reluctant dog. Spend a few sessions letting the dog sniff and investigate it. Put it on and immediately offer high-value treats. Keep the first session to 5 minutes. Gradually increase wear time over a week before attempting a full walk. This prevents the dog from developing a negative association with the harness.</p>
+
+<div class="blog-takeaway">
+  <p class="blog-takeaway-title">Bottom Line</p>
+  <p>For most dogs, a front-clip no-pull harness is the single best investment you can make for walking quality. Measure the chest girth accurately, check the two-finger fit test after every adjustment, and introduce it gradually over a week. <strong>A well-fitted harness makes loose-leash training 40–50% faster</strong> — it works with your training, not against it.</p>
+</div>
 `,
 
   'grooming-tips-indian-dogs': `
+<div class="blog-summary">
+  <p class="blog-summary-title">What This Guide Covers</p>
+  <ul>
+    <li>Bathing frequency for Indian climate and coat types</li>
+    <li>The right brushing tools for your dog's specific coat</li>
+    <li>Ear care — the most neglected and most important grooming task in India</li>
+    <li>Nail trimming, dental care, and tick checks done right</li>
+  </ul>
+</div>
+
 <p>Grooming in India comes with specific challenges: high humidity causes matting, heat encourages parasites, monsoon brings mud, and many owners are not sure how often to bathe their dogs. This guide covers everything.</p>
 
 <h2>Bathing: How Often Is Right?</h2>
 <p>Most dogs need bathing once every 3–6 weeks. More frequent bathing strips the natural oils that protect the skin and coat. Less frequent bathing allows bacteria and allergens to accumulate on the skin — a significant problem in India's humid climate.</p>
 <p>Exceptions: dogs that swim regularly need more frequent bathing. Dogs with skin conditions should follow their vet's schedule. Indian Pariah Dogs have particularly efficient self-cleaning coats and often need bathing only once a month.</p>
 
-<h2>The Right Way to Bathe</h2>
-<ol>
-<li>Brush thoroughly before bathing — water tightens mats, making them harder to remove</li>
-<li>Use lukewarm water, never hot or cold</li>
-<li>Use a dog-specific shampoo — human shampoos disrupt the skin's pH</li>
-<li>Massage shampoo into the coat for 3–5 minutes</li>
-<li>Rinse thoroughly — leftover shampoo causes itching</li>
-<li>Dry completely before letting the dog outside — damp coats attract dirt and cause skin infections</li>
-</ol>
+<div class="blog-tip">
+  <p class="blog-callout-label">Bathing Done Right</p>
+  <p>Always brush thoroughly <em>before</em> bathing — water tightens existing mats, making them nearly impossible to remove without cutting. Use lukewarm water, a dog-specific shampoo (human shampoo disrupts skin pH), and rinse until the water runs completely clear. <strong>Leftover shampoo is one of the most common causes of itchy skin in Indian dogs.</strong> Dry completely before letting your dog outdoors — a damp coat in Indian humidity invites skin infections within hours.</p>
+</div>
 
 <h2>Brushing: The Foundation of Coat Health</h2>
 <p>Brushing frequency depends on coat type:</p>
@@ -289,23 +428,51 @@ const FULL_CONTENT: Record<string, string> = {
 
 <h2>Ear Care: Critical in Indian Humidity</h2>
 <p>Ear infections are among the most common health issues in Indian dogs — humidity creates ideal conditions for yeast and bacteria. Check ears weekly. Signs of infection: odour, dark discharge, redness, head shaking, scratching at ears.</p>
-<p>Clean ears once a week with a vet-recommended ear cleaner and cotton ball. Never insert anything into the ear canal. Never use Q-tips. Never use oil, vinegar, or home remedies without veterinary guidance.</p>
+
+<div class="blog-warning">
+  <p class="blog-callout-label">Don't Ignore This</p>
+  <p>An untreated ear infection left for two weeks can progress to a middle ear infection, causing permanent hearing damage and requiring surgery. <strong>If you see dark discharge, smell an odour, or notice your dog shaking their head more than usual — see a vet within 48 hours.</strong> Clean ears weekly with a vet-recommended ear cleaner and cotton ball. Never insert anything into the ear canal. Never use Q-tips, oil, or vinegar.</p>
+</div>
 
 <h2>Nail Trimming</h2>
 <p>Overgrown nails cause discomfort, change gait, and can grow into the paw pad. Trim every 3–4 weeks, or when you hear clicking on hard floors. Use dog-specific nail clippers. Clip just the tip — avoid the pink quick (blood vessel). If you cut the quick, apply styptic powder or cornflour to stop bleeding.</p>
 
 <h2>Dental Care: The Most Neglected Part</h2>
-<p>By age 3, 80% of Indian dogs show dental disease. Daily tooth brushing with a dog-safe toothpaste is the gold standard. Never use human toothpaste — fluoride and xylitol are toxic to dogs. Dental chews and water additives help but do not replace brushing.</p>
+
+<div class="blog-fact">
+  <p class="blog-callout-label">Sobering Statistic</p>
+  <p>By age 3, <strong>80% of Indian dogs show signs of dental disease</strong> — painful tartar buildup, inflamed gums, and loose teeth. Because dogs rarely show pain from dental problems, most owners don't notice until the damage is severe. Daily tooth brushing with dog-safe toothpaste is the gold standard. Never use human toothpaste — fluoride and xylitol are both toxic to dogs.</p>
+</div>
 
 <h2>Tick and Flea Checks</h2>
 <p>After every outdoor walk in monsoon season, check behind the ears, between the toes, under the collar, around the tail base, and in the groin area. Remove ticks within 24 hours using tweezers or a tick-removal tool — never crush with fingers. Use vet-recommended prevention year-round.</p>
+
+<div class="blog-takeaway">
+  <p class="blog-takeaway-title">Bottom Line</p>
+  <p>Grooming is not just aesthetics — it is preventive healthcare. <strong>Weekly ear checks, monthly nail trims, daily dental brushing, and breed-appropriate coat care</strong> prevent the majority of common health issues in Indian dogs. Most problems are caught early when grooming is done regularly. Think of grooming time as your weekly health checkup for your dog.</p>
+</div>
 `,
 
   'puppy-training-basics': `
+<div class="blog-summary">
+  <p class="blog-summary-title">What This Guide Covers</p>
+  <ul>
+    <li>The socialisation window — why weeks 8–16 determine your dog's entire future</li>
+    <li>House training done correctly: the exact routine that works</li>
+    <li>Four essential first commands and how to teach each one</li>
+    <li>Bite inhibition — how to teach it before it becomes a serious problem</li>
+  </ul>
+</div>
+
 <p>The first 16 weeks of a puppy's life are the most important for shaping their adult personality and behaviour. What you do — and do not do — during this period has a lasting impact. This guide covers the essentials.</p>
 
 <h2>The Socialisation Window: Your Most Important Opportunity</h2>
-<p>Between 8 and 16 weeks, the puppy's brain is uniquely open to new experiences. Every positive exposure during this window — to people, sounds, surfaces, vehicles, other animals — permanently shapes the puppy's ability to handle those things calmly as an adult. Miss this window and you spend years working against fear responses that could have been prevented in weeks.</p>
+
+<div class="blog-fact">
+  <p class="blog-callout-label">Neuroscience Fact</p>
+  <p>Between 8 and 16 weeks, a puppy's brain has heightened neuroplasticity — it actively forms new neural pathways for every experience. After 16 weeks, this window closes permanently. <strong>Experiences (and the absence of experiences) during this period literally shape brain structure.</strong> A puppy not exposed to traffic sounds, strangers, different surfaces, and other animals during this window will show fear responses to these things for life — responses that are very difficult to reverse with later training.</p>
+</div>
+
 <p>Before vaccination is complete, you can still socialise safely: carry the puppy in areas with known, vaccinated dogs. Invite vaccinated friends' dogs for home visits. Expose to different sounds, surfaces, and people inside the home.</p>
 
 <h2>House Training: The First Priority</h2>
@@ -327,7 +494,12 @@ const FULL_CONTENT: Record<string, string> = {
 <p>Ask for a sit. Take one small step back. Return and reward. Build duration and distance one step at a time over weeks. Never push past the puppy's ability — always end on success.</p>
 
 <h3>Come (Week 1 onwards):</h3>
-<p>Never chase the puppy — this becomes a game. Crouch down, open arms, use an enthusiastic happy voice: "Bhoomi, come!" Reward massively when they arrive. Never call the puppy to punish. Recall must always predict wonderful things.</p>
+<p>Never chase the puppy — this becomes a game. Crouch down, open arms, use an enthusiastic happy voice: "Ricky, come!" Reward massively when they arrive. Never call the puppy to punish. Recall must always predict wonderful things.</p>
+
+<div class="blog-tip">
+  <p class="blog-callout-label">Session Length Rule</p>
+  <p>Puppies have very short attention spans — <strong>three-minute sessions, 4–5 times per day, are far more effective than one 30-minute session.</strong> A puppy that has mentally checked out is not learning. Always end each session with something the puppy knows well, reward enthusiastically, and stop before they lose focus. Training should feel like the highlight of their day, not homework.</p>
+</div>
 
 <h2>Bite Inhibition: Non-Negotiable</h2>
 <p>Puppies explore with their mouths. They also learn the appropriate pressure of biting from their littermates. If a bite is too hard, the other puppy yelps and stops playing — the biter learns. You must replicate this: when your puppy bites too hard, let out a short "Ouch!" and withdraw all attention for 30 seconds. Resume play. If the biting continues — leave the room entirely.</p>
@@ -341,18 +513,39 @@ const FULL_CONTENT: Record<string, string> = {
 <li>Do not expose to unvaccinated dogs in public before the primary series is complete</li>
 </ul>
 
-<h2>Training Session Length</h2>
-<p>Puppies have very short attention spans. Three-minute sessions, 4–5 times per day, are far more effective than one 30-minute session. Always end on a success — finish with something the puppy knows well and reward enthusiastically. Training should be the highlight of the puppy's day.</p>
+<div class="blog-warning">
+  <p class="blog-callout-label">Avoid These Completely</p>
+  <p>Punishment-based training (hitting, scruff-shaking, alpha rolls) does not teach a puppy what you want — it teaches them that you are a source of pain and fear. <strong>Fear-based puppies become anxious, unpredictable adult dogs</strong> that are far harder to live with and train. Positive reinforcement is not just kinder — it is faster and produces more reliable results. This is not opinion; it is supported by decades of animal behaviour research.</p>
+</div>
+
+<div class="blog-takeaway">
+  <p class="blog-takeaway-title">Bottom Line</p>
+  <p>The investment you make in your puppy's first 16 weeks pays dividends for the next 12–15 years. <strong>Socialise widely, house-train consistently, teach commands with short joyful sessions, and never use punishment.</strong> The puppy that's trained with patience and positive reinforcement in the first four months is the calm, confident, responsive adult dog that every owner wishes they had.</p>
+</div>
 `,
 
   'common-dog-health-issues': `
-<p>India's climate, endemic diseases, and living conditions create specific health risks for dogs that dog owners in other countries do not face. Knowing what to watch for could save your dog's life.</p>
+<div class="blog-summary">
+  <p class="blog-summary-title">What Indian Dog Owners Must Know</p>
+  <ul>
+    <li>The five most dangerous diseases specific to the Indian environment</li>
+    <li>Early warning signs for each — most are subtle until the disease is advanced</li>
+    <li>A clear list of emergencies that require same-day vet care</li>
+    <li>Prevention strategies that actually work in Indian conditions</li>
+  </ul>
+</div>
+
+<p>India's climate, endemic diseases, and living conditions create specific health risks for dogs that owners in other countries do not face. Knowing what to watch for could save your dog's life.</p>
 
 <h2>Tick Fever (Ehrlichiosis/Babesiosis)</h2>
 <p>The most common serious disease in Indian dogs. Caused by tick-borne parasites. Both Ehrlichiosis and Babesiosis can be fatal without prompt treatment.</p>
 <p><strong>Symptoms:</strong> Sudden high fever, lethargy, loss of appetite, pale gums, nosebleeds, swollen lymph nodes. Can progress to organ failure within days.</p>
 <p><strong>Action:</strong> If your dog has a fever above 39.5°C — see a vet within 24 hours. Tick fever responds well to doxycycline when caught early. Delayed treatment causes permanent organ damage.</p>
-<p><strong>Prevention:</strong> Year-round tick prevention is mandatory in India. Options: spot-on treatments (Frontline, Revolution), tick collars (Seresto), or oral tablets (NexGard, Bravecto). Check for ticks after every outdoor walk.</p>
+
+<div class="blog-warning">
+  <p class="blog-callout-label">Urgent</p>
+  <p>Pale, white, or yellowish gums in a dog that had tick exposure is a medical emergency — do not wait until the next morning. This indicates severe anaemia from Babesiosis destroying red blood cells. Without an immediate blood transfusion and IV treatment, dogs can die within 12–24 hours. <strong>If your dog's gums are any colour other than bubble-gum pink — go to an emergency vet immediately.</strong></p>
+</div>
 
 <h2>Parvovirus</h2>
 <p>Highly contagious, often fatal in unvaccinated puppies. The virus attacks the digestive system and survives in soil for up to a year.</p>
@@ -371,6 +564,11 @@ const FULL_CONTENT: Record<string, string> = {
 <p><strong>Action:</strong> Emergency if jaundice appears. Antibiotics required — prescription only.</p>
 <p><strong>Prevention:</strong> Annual Leptospirosis vaccination is strongly recommended, especially in monsoon-prone areas. Avoid letting dogs drink from puddles or floodwater.</p>
 
+<div class="blog-fact">
+  <p class="blog-callout-label">India-Specific Risk</p>
+  <p>Leptospirosis spikes dramatically during and after the monsoon season — floodwater carries infected urine from rodents across entire neighbourhoods. <strong>In cities like Mumbai, Chennai, and Kolkata, Leptospirosis cases in dogs increase 3–4x during July–September.</strong> If you are in a monsoon-heavy city and your dog is not vaccinated against Lepto — get it done before the rains arrive.</p>
+</div>
+
 <h2>Heat Stroke</h2>
 <p>Indian summers kill dogs every year. See our <a href="/blog/summer-dog-care-india">Summer Dog Care guide</a> for the full protocol. The key points: never leave a dog in a parked car, exercise only in early morning or evening, and know the emergency cooling procedure.</p>
 
@@ -388,9 +586,24 @@ const FULL_CONTENT: Record<string, string> = {
 <li>Body temperature above 40°C</li>
 <li>Suspected poisoning (onion, grapes, xylitol)</li>
 </ul>
+
+<div class="blog-takeaway">
+  <p class="blog-takeaway-title">Bottom Line</p>
+  <p>The diseases that kill Indian dogs most often — tick fever, parvovirus, leptospirosis — are almost entirely preventable through vaccination, tick prevention, and basic hygiene. <strong>Year-round tick prevention, an annual vaccine booster, and knowing the emergency signs saves more lives than any treatment.</strong> Prevention is not expensive. Treatment, when it's needed, almost always is.</p>
+</div>
 `,
 
   'indian-pariah-dog-guide': `
+<div class="blog-summary">
+  <p class="blog-summary-title">Why Read This Guide</p>
+  <ul>
+    <li>The INDog is one of the oldest dog breeds in the world — with a 4,500-year history in India</li>
+    <li>Why they are healthier, longer-lived, and better suited to India than any imported breed</li>
+    <li>Temperament, training approach, and what first-time owners get wrong</li>
+    <li>How to adopt versus where to find ethical rescues</li>
+  </ul>
+</div>
+
 <p>The Indian Pariah Dog — also known as the Desi Dog, INDog, or South Asian Pye Dog — is one of the oldest dog breeds in the world. Archaeological evidence places their ancestors in the Indian subcontinent over 4,500 years ago. They are not a mixed breed. They are a naturally evolved, genetically distinct breed that developed without human selection — only survival of the fittest.</p>
 
 <h2>Why Adopt an Indian Pariah Dog?</h2>
@@ -400,6 +613,21 @@ const FULL_CONTENT: Record<string, string> = {
 <li><strong>Exceptional health</strong>: Without selective breeding, INDogs avoided most genetic diseases that plague pedigree breeds — no hip dysplasia, no brachycephalic syndrome, no hereditary heart conditions. Average lifespan: 13–15 years, often longer.</li>
 <li><strong>Millions need homes</strong>: India has an estimated 35 million street dogs. Adopting an INDog directly reduces this population and saves a life.</li>
 </ol>
+
+<div class="blog-stats">
+  <div class="blog-stat">
+    <span class="blog-stat-num">15 yr</span>
+    <span class="blog-stat-label">avg INDog lifespan</span>
+  </div>
+  <div class="blog-stat">
+    <span class="blog-stat-num">10–12 yr</span>
+    <span class="blog-stat-label">avg Labrador lifespan</span>
+  </div>
+  <div class="blog-stat">
+    <span class="blog-stat-num">35 M</span>
+    <span class="blog-stat-label">street dogs in India</span>
+  </div>
+</div>
 
 <h2>Temperament</h2>
 <p>INDogs are intelligent, alert, and deeply loyal to their family while remaining appropriately wary of strangers. They are not naturally aggressive — but they are instinctively territorial and will alert bark at unusual activity. This makes them excellent natural watchdogs without requiring any training.</p>
@@ -414,22 +642,41 @@ const FULL_CONTENT: Record<string, string> = {
 <li>Build: Athletic, lean, built for endurance rather than power</li>
 </ul>
 
+<div class="blog-tip">
+  <p class="blog-callout-label">Training Insight</p>
+  <p>INDogs respond to positive reinforcement beautifully — but they have a strong independent streak that means they need to understand <em>why</em> a behaviour benefits them. Unlike Labradors who will repeat a command endlessly for a treat, INDogs will decide within 2–3 repetitions if it's worth their energy. <strong>Keep sessions short, high-value, and varied.</strong> Boredom is the enemy — an INDog who is bored will find their own entertainment, which is rarely what you want.</p>
+</div>
+
 <h2>Exercise and Activity</h2>
 <p>INDogs are active dogs with a natural drive to patrol and explore. Two 30-minute walks per day satisfy most individuals. They excel at off-leash activities in secured areas. Unlike high-drive working breeds, they can self-regulate activity based on temperature — resting during peak heat, becoming active in cooler hours.</p>
 
 <h2>Grooming</h2>
 <p>This is the easiest-to-maintain coat in the dog world. A weekly brush with a rubber brush removes loose fur. Bathing once a month is typically sufficient. Check for ticks after outdoor walks — INDogs are resistant to many diseases but are not immune to tick-borne infections.</p>
 
-<h2>Training</h2>
-<p>INDogs are highly trainable with positive reinforcement. They learn commands quickly and retain them reliably. The independent streak means they respond poorly to punishment-based methods — but with treats, play, and patience, they are a pleasure to train. Basic obedience takes 4–6 weeks; they pick up complex commands faster than many pedigree breeds.</p>
-
 <h2>Common Misconceptions</h2>
-<p><strong>"They are aggressive"</strong>: Street dogs that bite are typically in pain, protecting territory, or have been abused. Socialised INDogs that are raised in homes are no more aggressive than any other breed.</p>
-<p><strong>"They are dirty"</strong>: The Pariah coat is naturally self-cleaning. INDogs are among the cleanest breeds available.</p>
-<p><strong>"They won't bond with you"</strong>: Completely false. INDogs bond deeply and permanently with their family — often described by their owners as Velcro dogs who follow them everywhere.</p>
+
+<div class="blog-fact">
+  <p class="blog-callout-label">Setting the Record Straight</p>
+  <p>"They are aggressive" — Street dogs that bite are typically in pain, protecting territory, or have been abused. Socialised INDogs raised in homes are no more aggressive than any other breed. "They won't bond with you" — Completely false. INDogs bond deeply and permanently with their family, often described by owners as Velcro dogs who follow them everywhere. <strong>"They are dirty" — The Pariah coat is naturally self-cleaning. INDogs are among the cleanest breeds in existence.</strong></p>
+</div>
+
+<div class="blog-takeaway">
+  <p class="blog-takeaway-title">Bottom Line</p>
+  <p>The Indian Pariah Dog is the most practical, resilient, and India-appropriate breed you can own — with a lifespan up to 5 years longer than most imported breeds, minimal genetic disease, and extraordinary loyalty. <strong>They evolved over 4,500 years specifically for the Indian subcontinent.</strong> No imported breed can make that claim. If you are getting a dog in India, give serious consideration to adopting an INDog — from a shelter, from the street, or from a rescue organisation.</p>
+</div>
 `,
 
   'dog-vaccination-schedule-india': `
+<div class="blog-summary">
+  <p class="blog-summary-title">Quick Reference</p>
+  <ul>
+    <li>The core vaccines every dog in India must receive — and the exact timing</li>
+    <li>Non-core vaccines worth considering based on lifestyle</li>
+    <li>The complete puppy schedule from 6 weeks to 1 year</li>
+    <li>Where to get vaccinations and how much to budget</li>
+  </ul>
+</div>
+
 <p>Vaccination is the single most important preventive health measure you can take for your dog. Yet in India, vaccination schedules are often inconsistent, advice varies between vets, and many dog owners are uncertain about what is actually required. This guide gives you clarity.</p>
 
 <h2>Core Vaccines: Non-Negotiable for Every Dog in India</h2>
@@ -444,11 +691,16 @@ const FULL_CONTENT: Record<string, string> = {
 <h2>Puppy Schedule (Standard Indian Protocol)</h2>
 <table>
 <tr><th>Age</th><th>Vaccines</th><th>Notes</th></tr>
-<tr><td>6–8 weeks</td><td>DHPPi (1st dose)</td><td>First vaccination — do not take puppy to public areas yet</td></tr>
+<tr><td>6–8 weeks</td><td>DHPPi (1st dose)</td><td>First vaccination — keep puppy away from public areas</td></tr>
 <tr><td>9–12 weeks</td><td>DHPPi (2nd dose) + Rabies</td><td>Rabies required; add Leptospirosis if recommended</td></tr>
 <tr><td>14–16 weeks</td><td>DHPPi (3rd/final dose)</td><td>Primary series complete; full protection 2 weeks later</td></tr>
-<tr><td>1 year</td><td>DHPPi annual + Rabies booster</td><td>Annual boosters begin</td></tr>
+<tr><td>1 year</td><td>DHPPi annual + Rabies booster</td><td>Annual boosters begin, every year for life</td></tr>
 </table>
+
+<div class="blog-warning">
+  <p class="blog-callout-label">Don't Wait</p>
+  <p>Parvovirus can survive in soil for up to one year and is present in nearly every urban park and outdoor space in India. An unvaccinated puppy can contract it from a surface that an infected dog touched weeks earlier. <strong>Do not take your puppy to parks, pet shops, or public areas until 2 weeks after the third DHPPi dose</strong> — typically around 16–18 weeks of age. The risk during this window is very real and the disease is almost always fatal.</p>
+</div>
 
 <h2>Non-Core Vaccines: Recommended Based on Risk</h2>
 
@@ -461,19 +713,46 @@ const FULL_CONTENT: Record<string, string> = {
 <h2>Adult Boosters</h2>
 <p>Annual DHPPi and Rabies boosters are required to maintain immunity. Some vets now offer titre testing — a blood test that measures antibody levels — as an alternative to blanket annual boosters for adult dogs. Discuss with your vet if this is appropriate for your dog.</p>
 
+<div class="blog-fact">
+  <p class="blog-callout-label">Cold Chain Matters</p>
+  <p>Vaccines must be stored between 2–8°C at all times. Vaccines exposed to temperatures above 8°C become partially or completely ineffective — but you cannot tell by looking at them. <strong>Always get vaccinations from a licensed veterinary clinic, never from a pet shop or unlicensed practitioner.</strong> The difference between an effective and an ineffective vaccine looks identical; only the storage conditions tell you which one you're getting.</p>
+</div>
+
 <h2>Where to Get Vaccinations in India</h2>
-<p>Always use a licensed veterinary clinic. Vaccines require proper cold chain storage — temperatures above 8°C can render them ineffective. Pet shops selling vaccines cannot guarantee proper storage.</p>
+<p>Always use a licensed veterinary clinic. Vaccines require proper cold chain storage. Pet shops selling vaccines cannot guarantee proper storage.</p>
 <p>Cost range in India: ₹300–800 per combination vaccine visit depending on city and clinic. The Rabies vaccine is often subsidised and available through government veterinary hospitals.</p>
 
-<h2>Keep a Vaccination Record</h2>
-<p>Maintain a physical vaccination booklet. Many boarding facilities, groomers, and dog parks in India now require proof of vaccination. Your vet should stamp and sign the record at each visit. Keep a photocopy and photo on your phone.</p>
+<div class="blog-tip">
+  <p class="blog-callout-label">Keep Records</p>
+  <p>Maintain a physical vaccination booklet that your vet stamps and signs at every visit. Photograph every page and store in your phone's camera roll. Many boarding facilities, groomers, and dog parks in India now require proof of vaccination — and if your dog bites someone, vaccination records are legally important. <strong>Treat this booklet like a passport. Replace it immediately if lost.</strong></p>
+</div>
+
+<div class="blog-takeaway">
+  <p class="blog-takeaway-title">Bottom Line</p>
+  <p>The puppy vaccination series and annual boosters cost less than a single hospitalisation for Parvovirus or Distemper. <strong>Follow the schedule, use a licensed vet clinic, keep your records, and don't delay boosters.</strong> The diseases these vaccines prevent are common in India, often fatal, and entirely avoidable. Vaccination is the single highest-return health investment you will ever make for your dog.</p>
+</div>
 `,
 
   'tick-prevention-dogs-india': `
-<p>Ticks are year-round problem in India — not just a monsoon issue. The Brown Dog Tick (Rhipicephalus sanguineus), the most common species in Indian urban environments, thrives in dry conditions as well. Tick fever from Ehrlichiosis or Babesiosis can be fatal without prompt treatment. Consistent prevention is essential.</p>
+<div class="blog-summary">
+  <p class="blog-summary-title">What This Guide Covers</p>
+  <ul>
+    <li>Why ticks are a year-round problem in India, not just monsoon season</li>
+    <li>All prevention options compared: spot-on, collar, oral — with India prices</li>
+    <li>How to treat your home and garden, not just your dog</li>
+    <li>Correct tick removal technique and the signs of tick fever</li>
+  </ul>
+</div>
+
+<p>Ticks are a year-round problem in India — not just a monsoon issue. The Brown Dog Tick (Rhipicephalus sanguineus), the most common species in Indian urban environments, thrives in dry conditions as well. Tick fever from Ehrlichiosis or Babesiosis can be fatal without prompt treatment. Consistent prevention is essential.</p>
 
 <h2>Understanding the Tick Life Cycle</h2>
 <p>Ticks go through four stages: egg, larva, nymph, adult. All three active stages feed on blood. The Brown Dog Tick can complete its entire life cycle inside a home — carpets, sofas, curtains, and gaps in flooring all serve as harbouring spots. This is why treating just the dog is insufficient — the environment also needs attention.</p>
+
+<div class="blog-fact">
+  <p class="blog-callout-label">Why "Just the Dog" Isn't Enough</p>
+  <p>A single female Brown Dog Tick can lay up to <strong>4,000 eggs</strong> in the gaps of your skirting board or behind your sofa. When the eggs hatch, the larvae find your dog, feed, drop off, moult into nymphs, find your dog again, and the cycle repeats — entirely indoors. If you find multiple ticks on your dog, assume the home is infested and treat both the dog and the environment simultaneously.</p>
+</div>
 
 <h2>Tick Prevention Products: Your Options</h2>
 
@@ -486,10 +765,15 @@ const FULL_CONTENT: Record<string, string> = {
 </ul>
 
 <h3>Tick Collars (Convenience Option)</h3>
-<p>The <strong>Seresto collar</strong> provides 8 months of protection against ticks and fleas. More expensive upfront (₹3,500–5,000) but economical over the year. Effective and hands-free. Must be removed before bathing — reapply after drying.</p>
+<p>The <strong>Seresto collar</strong> provides 8 months of protection against ticks and fleas. More expensive upfront (₹3,500–5,000) but economical over the year. Effective and hands-free.</p>
 
 <h3>Oral Tablets (Newest Option)</h3>
-<p>NexGard (monthly) and Bravecto (3-monthly) are oral chews that dogs take as a treat. Highly effective — tick must bite the dog before dying, but research shows minimal disease transmission occurs in the time before the tick is killed. Available from vet clinics.</p>
+<p>NexGard (monthly) and Bravecto (3-monthly) are oral chews that dogs take as a treat. Highly effective. Available from vet clinics.</p>
+
+<div class="blog-tip">
+  <p class="blog-callout-label">Best Value for India</p>
+  <p>For most Indian dog owners, a monthly spot-on like Frontline Plus (₹4,200/year) offers the best balance of reliability, cost, and availability. The Seresto collar (₹4,000–5,000) costs similarly but lasts 8 months and is more convenient for owners who forget monthly applications. <strong>Whichever you choose — consistency matters far more than which product you pick.</strong> A lapsed month of protection is when tick fever happens.</p>
+</div>
 
 <h2>Environmental Treatment</h2>
 <p>If you find multiple ticks on your dog, treat the environment:</p>
@@ -512,14 +796,33 @@ const FULL_CONTENT: Record<string, string> = {
 </ul>
 
 <h2>Correct Tick Removal</h2>
-<p>Use fine-tipped tweezers or a tick removal hook. Grasp the tick as close to the skin surface as possible. Pull upward with steady, even pressure — do not twist or jerk. Never crush the tick with your fingers (disease transmission risk). Never use petroleum jelly, heat, or nail polish to make the tick detach. After removal, clean the bite area with rubbing alcohol and wash your hands thoroughly.</p>
+<p>Use fine-tipped tweezers or a tick removal hook. Grasp the tick as close to the skin surface as possible. Pull upward with steady, even pressure — do not twist or jerk. Never crush the tick with your fingers (disease transmission risk). Never use petroleum jelly, heat, or nail polish. After removal, clean the bite area with rubbing alcohol and wash your hands thoroughly.</p>
 
 <h2>Signs of Tick Fever — Act Fast</h2>
-<p>Symptoms appear 1–3 weeks after a tick bite. Sudden high fever is usually the first sign, followed by lethargy and loss of appetite. Pale gums, nosebleeds, and bruising indicate severe thrombocytopenia (low platelet count) — this is a medical emergency. See a vet within 24 hours of any fever in a dog that has had tick exposure.</p>
+
+<div class="blog-warning">
+  <p class="blog-callout-label">Medical Emergency</p>
+  <p>Symptoms of tick fever appear 1–3 weeks after a tick bite. <strong>Sudden high fever is almost always the first sign</strong>, followed by lethargy and complete loss of appetite. Pale gums, nosebleeds, and bruising under the skin indicate severe platelet loss — this is life-threatening. See a vet within 24 hours of any fever in a dog with tick exposure. Tick fever caught in the first 24–48 hours responds well to doxycycline. Delayed by even 2–3 days, the prognosis worsens significantly.</p>
+</div>
+
+<div class="blog-takeaway">
+  <p class="blog-takeaway-title">Bottom Line</p>
+  <p>Tick prevention is one of the most cost-effective things you can do for your dog's health. <strong>Pick one prevention method and apply it without gaps, check your dog after every outdoor walk, and know the signs of tick fever by heart.</strong> The Brown Dog Tick is present year-round in Indian homes and gardens — the only variable is whether your dog has protection or not.</p>
+</div>
 `,
 
   'labrador-care-guide-india': `
-<p>The Labrador Retriever is India's most popular dog breed — and for good reason. They are friendly, trainable, gentle with children, and adaptable to apartment life when properly exercised. However, raising a Lab well in India requires understanding both the breed's needs and how Indian conditions affect them.</p>
+<div class="blog-summary">
+  <p class="blog-summary-title">Labrador Essentials</p>
+  <ul>
+    <li>The obesity epidemic in Indian Labs — the gene that causes it, and how to fight it</li>
+    <li>How much exercise a Lab actually needs (most Indian owners under-exercise significantly)</li>
+    <li>Grooming, ear care, and the health checks that matter most</li>
+    <li>Whether a Lab is actually right for your lifestyle and home</li>
+  </ul>
+</div>
+
+<p>The Labrador Retriever is India's most popular dog breed — and for good reason. They are friendly, trainable, gentle with children, and adaptable to apartment life when properly exercised. However, raising a Lab well in India requires understanding both the breed's specific needs and how Indian conditions affect them.</p>
 
 <h2>Labrador Basics</h2>
 <ul>
@@ -532,26 +835,49 @@ const FULL_CONTENT: Record<string, string> = {
 </ul>
 
 <h2>The Obesity Problem: India's Most Common Lab Issue</h2>
-<p>Labradors have a gene mutation (POMC gene) that makes them perpetually hungry and less able to feel satiated. Combined with India's culture of sharing food and overfeeding, obesity is by far the most common preventable health issue in Indian Labs.</p>
-<p>A healthy Lab should have a visible waist when viewed from above and palpable ribs without pressing hard. If you cannot feel the ribs at all, your Lab is overweight. Overweight Labs suffer earlier and more severe hip dysplasia, have shorter lifespans, and develop diabetes and heart conditions.</p>
-<p><strong>Feeding rule:</strong> Feed measured portions twice daily. No free-feeding. No table scraps. Treats count toward daily calorie intake. 25–30 kg adult Labs typically need 2.5–3 cups of dry food per day — less if neutered.</p>
+
+<div class="blog-warning">
+  <p class="blog-callout-label">The Science Behind Labrador Hunger</p>
+  <p>Labradors carry a mutation in the POMC gene that disrupts the brain signal telling them they're full. They are <em>genuinely unable</em> to feel satiated the way other dogs can. This is not behaviour you can train away — it is neurological. Combined with India's culture of sharing food from the table, <strong>obesity is the single most common and most damaging health issue in Indian Labs.</strong> An overweight Lab suffers earlier, more severe hip dysplasia, a shorter lifespan, and higher risk of diabetes and joint failure.</p>
+</div>
+
+<p>A healthy Lab should have a visible waist when viewed from above and palpable ribs without pressing hard. If you cannot feel the ribs at all, your Lab is overweight. Feeding rule: measured portions twice daily, no free-feeding, no table scraps, and treats counted toward daily calories. A 25–30 kg adult Lab typically needs 2.5–3 cups of dry food per day — less if neutered.</p>
+
+<div class="blog-stats">
+  <div class="blog-stat">
+    <span class="blog-stat-num">60–90</span>
+    <span class="blog-stat-label">minutes of exercise needed daily</span>
+  </div>
+  <div class="blog-stat">
+    <span class="blog-stat-num">2×</span>
+    <span class="blog-stat-label">daily meals, measured portions only</span>
+  </div>
+  <div class="blog-stat">
+    <span class="blog-stat-num">10–12 yr</span>
+    <span class="blog-stat-label">average lifespan</span>
+  </div>
+</div>
 
 <h2>Exercise: Non-Negotiable</h2>
 <p>Labs need 60–90 minutes of exercise daily. A 15-minute leash walk twice a day is not sufficient for an adult Lab. Insufficient exercise leads to destructive behaviour, excessive chewing, hyperactivity, and weight gain.</p>
-<p>In Indian conditions: exercise in early morning (before 8 AM) and evening (after 7 PM). Labs love water — if you have access to a clean water source, swimming is excellent exercise and avoids heat issues. Fetch and retrieve games satisfy their natural drives.</p>
+
+<div class="blog-tip">
+  <p class="blog-callout-label">Exercise Smart in India</p>
+  <p>In Indian conditions: exercise before 8 AM and after 7 PM. Labs love water — if you have access to a clean water source, swimming is excellent low-impact exercise that avoids heat issues entirely. Fetch and retrieve games satisfy their natural drive and tire them mentally as well as physically. <strong>A mentally tired Lab is a well-behaved Lab.</strong> Consider puzzle feeders and training sessions as supplements to physical exercise.</p>
+</div>
 
 <h2>Grooming: More Than You Expect</h2>
 <p>Labs have a dense double coat that sheds year-round with two major shedding seasons. During shedding, daily brushing prevents fur from coating your home. Outside of shedding, twice-weekly brushing is sufficient.</p>
 <p>Ear care is critical for Labs — their floppy ears trap moisture and create ideal conditions for infection. Check and clean ears weekly. Signs of infection: odour, scratching, dark discharge.</p>
 
 <h2>Training: Start Day One</h2>
-<p>Labs are among the easiest breeds to train — but they are also easily distracted by food and smells. Start training at 8 weeks. Labs respond beautifully to positive reinforcement. Use high-value treats (chicken pieces, cheese) for new skills. A food-motivated Labrador will learn anything you consistently teach.</p>
+<p>Labs are among the easiest breeds to train — but they are also easily distracted by food and smells. Start training at 8 weeks. Labs respond beautifully to positive reinforcement. Use high-value treats (chicken pieces, cheese) for new skills.</p>
 <p>Key commands to teach in the first month: sit, down, stay, come, leave it, drop it. "Leave it" and "drop it" are particularly important for a breed that will try to eat everything it encounters.</p>
 
 <h2>Health Issues to Watch</h2>
 <ul>
-<li><strong>Hip Dysplasia</strong>: Very common in Labs. Ensure the puppy's parents have OFA/PennHIP certification if buying from a breeder. Maintain healthy weight — every extra kilogram dramatically worsens hip dysplasia.</li>
-<li><strong>Obesity</strong>: Already covered — the most critical preventable issue.</li>
+<li><strong>Hip Dysplasia</strong>: Very common in Labs. Maintain healthy weight — every extra kilogram dramatically worsens hip dysplasia. Ensure puppy's parents have OFA/PennHIP certification if buying from a breeder.</li>
+<li><strong>Obesity</strong>: Already covered — the most critical preventable issue by far.</li>
 <li><strong>Ear infections</strong>: Weekly ear checks and cleaning.</li>
 <li><strong>Eye conditions</strong>: Progressive Retinal Atrophy is hereditary in Labs. Annual eye checks after age 5.</li>
 <li><strong>Elbow dysplasia</strong>: Common in large breeds. Avoid over-exercise until growth plates close at 12–18 months.</li>
@@ -559,180 +885,11 @@ const FULL_CONTENT: Record<string, string> = {
 
 <h2>Is a Lab Right for You?</h2>
 <p>Yes, if you have at least 90 minutes per day for exercise and enrichment, can commit to measured feeding without giving in to the begging, and have space to accommodate a large energetic dog. Labs are not ideal for owners who work 12+ hours a day without dog walkers or sitters — they develop destructive behaviour from boredom. But for active families with time to invest, the Labrador Retriever is an extraordinarily rewarding companion.</p>
+
+<div class="blog-takeaway">
+  <p class="blog-takeaway-title">Bottom Line</p>
+  <p>Owning a Labrador in India is deeply rewarding — but it demands commitment to exercise, strict feeding discipline, and weekly grooming. <strong>The single most important thing you can do for your Lab is keep them lean.</strong> A fit, properly exercised Labrador is a completely different dog from an overweight, under-exercised one — more energetic, more trainable, less prone to joint problems, and likely to live 2–3 years longer. Weight is everything with this breed.</p>
+</div>
 `,
+
 };
-
-interface Post {
-  id: string; title: string; slug: string; excerpt: string;
-  content: string; featured_image: string; category: string;
-  author: string; read_time_minutes: number; created_at: string;
-}
-
-const MOCK_POSTS: Post[] = [
-  { id:'b1',  title:'Best Dog Food Brands in India for 2026',                   slug:'best-dog-food-brands-india',          excerpt:"India's top dog food brands, nutrition ratings, and matching recipes for every breed and budget.",              featured_image:'https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=1600&q=85&auto=format&fit=crop', category:'Nutrition', author:'PetopiaCare Experts', read_time_minutes:8,  created_at:'2026-04-01', content: BLOG_CONTENT['best-dog-food-brands-india'] ?? '' },
-  { id:'b2',  title:'Homemade Dog Food Recipe for Indian Dogs',                  slug:'homemade-dog-food-recipe-indian-dogs', excerpt:'Nutritious, budget-friendly dog food recipes using Indian kitchen ingredients.',                                featured_image:'https://images.unsplash.com/photo-1568572933382-74d440642117?w=1600&q=85&auto=format&fit=crop', category:'Nutrition', author:'PetopiaCare Experts', read_time_minutes:10, created_at:'2026-04-06', content: BLOG_CONTENT['homemade-dog-food-recipe-indian-dogs'] ?? '' },
-  { id:'b3',  title:'Stop Dog Pulling on Leash: Training Tips That Work',        slug:'stop-dog-pulling-on-leash',           excerpt:'Turn daily walks into a calm experience with proven positive-reinforcement leash training techniques.',              featured_image:'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=1600&q=85&auto=format&fit=crop', category:'Training',  author:'PetopiaCare Experts', read_time_minutes:7,  created_at:'2026-03-28', content: BLOG_CONTENT['stop-dog-pulling-on-leash'] ?? '' },
-  { id:'b4',  title:'Summer Dog Care in India: Hydration & Heat Safety',         slug:'summer-dog-care-india',               excerpt:"Keep your dog safe during India's hot months. Heatstroke prevention, hydration tips, and summer grooming.",           featured_image:'https://images.unsplash.com/photo-1537151608804-ea6f25dc1005?w=1600&q=85&auto=format&fit=crop', category:'Health',    author:'PetopiaCare Experts', read_time_minutes:8,  created_at:'2026-03-20', content: BLOG_CONTENT['summer-dog-care-india'] ?? '' },
-  { id:'b5',  title:'How to Choose the Right Dog Harness',                       slug:'choosing-safe-dog-harness',           excerpt:'A complete buying guide — comparing no-pull, padded, and polymer harnesses for Indian breeds.',                       featured_image:'https://images.unsplash.com/photo-1586671267731-da2cf3ceeb80?w=1600&q=85&auto=format&fit=crop', category:'Products',  author:'PetopiaCare Experts', read_time_minutes:6,  created_at:'2026-03-14', content: BLOG_CONTENT['choosing-safe-dog-harness'] ?? '' },
-  { id:'b6',  title:'Dog Grooming Guide for Indian Breeds',                      slug:'grooming-tips-indian-dogs',           excerpt:'Coat care, nail trimming, ear cleaning and skin health routines tailored for Indian weather and breeds.',               featured_image:'https://images.unsplash.com/photo-1625213327543-b24c2fc0d6ee?w=1600&q=85&auto=format&fit=crop', category:'Grooming',  author:'PetopiaCare Experts', read_time_minutes:7,  created_at:'2026-03-10', content: BLOG_CONTENT['grooming-tips-indian-dogs'] ?? '' },
-  { id:'b7',  title:'Puppy Training Basics Every New Owner Needs',               slug:'puppy-training-basics',               excerpt:'Start your puppy right — house training, socialisation, bite inhibition, and reward-based first commands.',              featured_image:'https://images.unsplash.com/photo-1552053831-71594a27632d?w=1600&q=85&auto=format&fit=crop', category:'Training',  author:'PetopiaCare Experts', read_time_minutes:9,  created_at:'2026-03-05', content: BLOG_CONTENT['puppy-training-basics'] ?? '' },
-  { id:'b8',  title:'Common Dog Health Issues in India & When to See a Vet',     slug:'common-dog-health-issues',            excerpt:"Tick fever, mange, parvovirus and more — symptoms to watch for and when it's a vet emergency.",                      featured_image:'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=1600&q=85&auto=format&fit=crop', category:'Health',    author:'Dr. Priya Sharma',     read_time_minutes:10, created_at:'2026-02-28', content: BLOG_CONTENT['common-dog-health-issues'] ?? '' },
-  { id:'b9',  title:'Indian Pariah Dog: The Complete Breed Guide',               slug:'indian-pariah-dog-guide',             excerpt:'Everything about the Desi dog — temperament, care, training, and why adopting an INDog is the best decision.',         featured_image:'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1600&q=85&auto=format&fit=crop', category:'Breeds',    author:'PetopiaCare Experts', read_time_minutes:9,  created_at:'2026-02-20', content: BLOG_CONTENT['indian-pariah-dog-guide'] ?? '' },
-  { id:'b10', title:'Vaccination Schedule for Dogs in India — 2026 Guide',       slug:'dog-vaccination-schedule-india',      excerpt:'Core vaccines, timing, cost, and what to expect — the complete guide for Indian dog owners.',                         featured_image:'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?w=1600&q=85&auto=format&fit=crop', category:'Health',    author:'Dr. Priya Sharma',     read_time_minutes:8,  created_at:'2026-02-15', content: BLOG_CONTENT['dog-vaccination-schedule-india'] ?? '' },
-  { id:'b11', title:'Tick Prevention for Dogs in India: Year-Round Guide',       slug:'tick-prevention-dogs-india',          excerpt:'Spot-on treatments, tick collars, and environmental control — comprehensive tick prevention for Indian conditions.',     featured_image:'https://images.unsplash.com/photo-1601758174114-e711c0cbaa69?w=1600&q=85&auto=format&fit=crop', category:'Health',    author:'PetopiaCare Experts', read_time_minutes:7,  created_at:'2026-02-10', content: BLOG_CONTENT['tick-prevention-dogs-india'] ?? '' },
-  { id:'b12', title:"Labrador Retriever in India: Owner's Complete Care Guide",  slug:'labrador-care-guide-india',           excerpt:"Labs are India's most popular breed. Here's everything you need to raise one well in the Indian climate.",             featured_image:'https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=1600&q=85&auto=format&fit=crop', category:'Breeds',    author:'PetopiaCare Experts', read_time_minutes:11, created_at:'2026-02-01', content: BLOG_CONTENT['labrador-care-guide-india'] ?? '' },
-];
-
-async function getPost(slug: string): Promise<Post | null> {
-  try {
-    const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? '', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '');
-    const { data } = await db.from('blog_posts').select('*').eq('slug', slug).eq('status', 'published').single();
-    if (data) return data as Post;
-  } catch {}
-  return MOCK_POSTS.find(p => p.slug === slug) ?? null;
-}
-
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
-  const post = await getPost(slug);
-  if (!post) return { title: 'Post Not Found' };
-  return {
-    title: `${post.title} | PetopiaCare Blog`,
-    description: post.excerpt,
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      type: 'article',
-      publishedTime: post.created_at,
-      authors: [post.author],
-      images: post.featured_image ? [{ url: post.featured_image, width: 1200, height: 630, alt: post.title }] : [],
-      url: `https://petopiacare.in/blog/${post.slug}`,
-    },
-    twitter: { card: 'summary_large_image', title: post.title, description: post.excerpt, images: post.featured_image ? [post.featured_image] : [] },
-  };
-}
-
-const CATEGORY_COLORS: Record<string, string> = {
-  Nutrition:'bg-green-100 text-green-700', Training:'bg-amber-100 text-amber-700',
-  Health:'bg-rose-100 text-rose-700', Products:'bg-primary-100 text-primary-700',
-  Grooming:'bg-purple-100 text-purple-700', Breeds:'bg-blue-100 text-blue-700',
-};
-
-export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const post = await getPost(slug);
-  if (!post) notFound();
-
-  const aLD = articleLD({ title: post.title, excerpt: post.excerpt, image: post.featured_image, author: post.author, datePublished: post.created_at, url: `/blog/${post.slug}`, category: post.category });
-  const bLD = breadcrumbLD([{ label: 'Home', href: '/' }, { label: 'Blog', href: '/blog' }, { label: post.title }]);
-  const related = MOCK_POSTS.filter(p => p.slug !== slug && p.category === post.category).slice(0, 3);
-
-  return (
-    <>
-      <JsonLd data={[aLD, bLD]} />
-      <article className="bg-white min-h-screen">
-
-        {/* ── Hero ── */}
-        <div className="w-full h-[420px] md:h-[580px] relative overflow-hidden bg-neutral-900">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={post.featured_image} alt={post.title} className="w-full h-full object-cover opacity-75" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
-          <div className="absolute inset-0 flex flex-col justify-end">
-            <div className="max-w-4xl mx-auto w-full px-6 md:px-10 pb-10 md:pb-14">
-              <Link href="/blog" className="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-body-sm mb-6 transition-colors">
-                <ArrowLeft size={14} /> Back to Blog
-              </Link>
-              <div className="mb-4">
-                <span className={`inline-block text-label-sm font-semibold px-3 py-1.5 rounded-full ${CATEGORY_COLORS[post.category] ?? 'bg-neutral-100 text-neutral-600'}`}>
-                  {post.category}
-                </span>
-              </div>
-              <h1 className="font-display font-bold text-display-sm md:text-display-md lg:text-[2.6rem] text-white leading-tight max-w-3xl">{post.title}</h1>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Meta bar ── */}
-        <div className="border-b border-neutral-100 bg-white sticky top-0 z-10 shadow-sm">
-          <div className="max-w-4xl mx-auto px-6 py-4 flex flex-wrap items-center gap-6 text-label-sm text-neutral-500">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
-                <User size={13} className="text-primary-700" />
-              </div>
-              <span className="font-medium text-neutral-700">{post.author}</span>
-            </div>
-            <span className="w-px h-4 bg-neutral-200 hidden sm:block" />
-            <span className="flex items-center gap-1.5"><Calendar size={13} /> {new Date(post.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-            <span className="w-px h-4 bg-neutral-200 hidden sm:block" />
-            <span className="flex items-center gap-1.5"><Clock size={13} /> {post.read_time_minutes} min read</span>
-          </div>
-        </div>
-
-        {/* ── Content ── */}
-        <div className="max-w-3xl mx-auto px-6 py-14 md:py-20">
-
-          {/* Excerpt lead */}
-          <p className="text-body-lg text-neutral-600 leading-loose mb-10 font-medium border-l-[3px] border-primary-400 pl-6 italic">{post.excerpt}</p>
-
-          {/* Article body */}
-          <div
-            className="prose prose-neutral max-w-none
-              prose-headings:font-display prose-headings:font-bold prose-headings:text-neutral-900
-              prose-h2:text-[1.6rem] prose-h2:leading-tight prose-h2:mt-12 prose-h2:mb-5 prose-h2:pb-3 prose-h2:border-b prose-h2:border-neutral-100
-              prose-h3:text-heading-lg prose-h3:mt-8 prose-h3:mb-3
-              prose-p:text-[1.0625rem] prose-p:leading-[1.85] prose-p:text-neutral-700 prose-p:my-5
-              prose-li:text-[1.0625rem] prose-li:leading-relaxed prose-li:text-neutral-700
-              prose-ul:my-5 prose-ul:space-y-1.5 prose-ol:my-5 prose-ol:space-y-1.5
-              prose-a:text-primary-600 prose-a:font-medium prose-a:no-underline hover:prose-a:underline
-              prose-strong:text-neutral-900 prose-strong:font-semibold
-              prose-table:w-full prose-table:border-collapse
-              prose-th:bg-neutral-50 prose-th:text-left prose-th:px-4 prose-th:py-3 prose-th:text-label prose-th:font-semibold prose-th:text-neutral-600 prose-th:border prose-th:border-neutral-200
-              prose-td:px-4 prose-td:py-3 prose-td:border prose-td:border-neutral-200 prose-td:text-neutral-700 prose-td:text-body-sm
-              prose-blockquote:border-l-4 prose-blockquote:border-primary-300 prose-blockquote:pl-5 prose-blockquote:italic prose-blockquote:text-neutral-600"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
-
-          {/* ── CTA ── */}
-          <div className="mt-16 relative overflow-hidden bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 rounded-3xl p-8 md:p-10 text-white">
-            <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4" />
-            <div className="relative flex flex-col sm:flex-row gap-6 sm:items-center sm:justify-between">
-              <div>
-                <p className="text-label font-semibold text-primary-200 uppercase tracking-widest mb-2">PetopiaCare Store</p>
-                <p className="font-display font-bold text-display-sm mb-2 leading-tight">Premium gear for Indian dogs</p>
-                <p className="text-primary-100/80 text-body-sm">Harnesses, leashes, and collars built for Indian conditions</p>
-              </div>
-              <Link href="/products" className="flex-shrink-0 bg-white text-primary-700 font-bold px-6 py-3 rounded-2xl hover:bg-primary-50 transition-colors text-body-sm flex items-center gap-2 whitespace-nowrap">
-                Browse Products <ArrowRight size={14} />
-              </Link>
-            </div>
-          </div>
-
-          {/* ── Related posts ── */}
-          {related.length > 0 && (
-            <section className="mt-16">
-              <div className="flex items-center gap-4 mb-8">
-                <h2 className="font-display font-bold text-display-sm text-neutral-900 whitespace-nowrap">Related Articles</h2>
-                <div className="flex-1 h-px bg-neutral-100" />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {related.map(r => (
-                  <Link key={r.slug} href={`/blog/${r.slug}`} className="group bg-white border border-neutral-100 rounded-3xl overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
-                    <div className="h-44 overflow-hidden bg-neutral-100">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={r.featured_image} alt={r.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    </div>
-                    <div className="p-5">
-                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full mb-3 inline-block ${CATEGORY_COLORS[r.category] ?? 'bg-neutral-100 text-neutral-600'}`}>{r.category}</span>
-                      <p className="font-display font-semibold text-neutral-900 text-body-md line-clamp-2 group-hover:text-primary-600 transition-colors leading-snug mb-3">{r.title}</p>
-                      <p className="text-label-sm text-neutral-400 flex items-center gap-1.5"><Clock size={11} /> {r.read_time_minutes} min read</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          )}
-        </div>
-      </article>
-    </>
-  );
-}
