@@ -29,13 +29,21 @@ export default function NewDigitalProduct() {
     if (!file) return;
     setUploading(true);
     setUploadError('');
-    const body = new FormData();
-    body.append('file', file);
     try {
-      const res = await fetch('/api/admin/upload', { method: 'POST', body });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Upload failed');
-      setFormData(prev => ({ ...prev, download_url: data.url }));
+      // Step 1: get signed URL from server (tiny request, no body size issue)
+      const sigRes = await fetch(`/api/admin/upload?filename=${encodeURIComponent(file.name)}`);
+      const sigData = await sigRes.json();
+      if (!sigRes.ok) throw new Error(sigData.error ?? 'Could not get upload URL');
+
+      // Step 2: upload file directly to Supabase Storage (bypasses Next.js size limit)
+      const uploadRes = await fetch(sigData.signedUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': file.type },
+        body: file,
+      });
+      if (!uploadRes.ok) throw new Error('Upload to storage failed');
+
+      setFormData(prev => ({ ...prev, download_url: sigData.publicUrl }));
     } catch (err) {
       setUploadError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
