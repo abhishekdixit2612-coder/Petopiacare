@@ -177,9 +177,9 @@ export default function AdminDashboard() {
                   </Link>
                   <Link
                     href="/admin/blog/seed"
-                    className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-all"
+                    className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-all flex items-center justify-center gap-2"
                   >
-                    Seed Content
+                    <Download size={16} /> Import All 25
                   </Link>
                 </div>
               </div>
@@ -192,19 +192,25 @@ export default function AdminDashboard() {
                   </div>
                   <h2 className="font-display text-heading-lg font-bold text-neutral-900">Digital Products</h2>
                 </div>
-                <p className="text-neutral-600 text-body-sm mb-8 max-w-sm">Seed free downloads and paid courses for your customers.</p>
+                <p className="text-neutral-600 text-body-sm mb-8 max-w-sm">Manage free downloads and paid courses. Edit, delete, or add new products.</p>
                 <div className="flex flex-col gap-3">
                   <Link
-                    href="/digital-products"
+                    href="/admin/digital-products"
                     className="w-full bg-white border-2 border-neutral-200 hover:border-success-500 text-neutral-700 hover:text-success-700 font-bold py-3 px-4 rounded-xl text-center transition-all"
                   >
-                    View Catalog
+                    Manage Products
                   </Link>
                   <Link
                     href="/admin/digital-products/new"
                     className="w-full bg-success-500 hover:bg-success-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-all"
                   >
-                    + Add Digital Products
+                    + New Product
+                  </Link>
+                  <Link
+                    href="/admin/digital-products/seed"
+                    className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition-all flex items-center justify-center gap-2"
+                  >
+                    <Download size={16} /> Import All 10
                   </Link>
                 </div>
               </div>

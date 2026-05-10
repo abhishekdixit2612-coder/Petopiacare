@@ -5,6 +5,8 @@ import { ArrowLeft, Clock, User, Calendar, ArrowRight } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 import { JsonLd, articleLD, breadcrumbLD } from '@/lib/seo';
 import { BLOG_CONTENT } from '@/lib/blog-content';
+import BlockRenderer from '@/components/blog/BlockRenderer';
+import { isBlockContent, parseBlocks } from '@/types/blog-blocks';
 
 export const revalidate = 3600;
 
@@ -674,23 +676,27 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {/* Excerpt lead */}
           <p className="text-body-lg text-neutral-600 leading-loose mb-10 font-medium border-l-[3px] border-primary-400 pl-6 italic">{post.excerpt}</p>
 
-          {/* Article body */}
-          <div
-            className="prose prose-neutral max-w-none
-              prose-headings:font-display prose-headings:font-bold prose-headings:text-neutral-900
-              prose-h2:text-[1.6rem] prose-h2:leading-tight prose-h2:mt-12 prose-h2:mb-5 prose-h2:pb-3 prose-h2:border-b prose-h2:border-neutral-100
-              prose-h3:text-heading-lg prose-h3:mt-8 prose-h3:mb-3
-              prose-p:text-[1.0625rem] prose-p:leading-[1.85] prose-p:text-neutral-700 prose-p:my-5
-              prose-li:text-[1.0625rem] prose-li:leading-relaxed prose-li:text-neutral-700
-              prose-ul:my-5 prose-ul:space-y-1.5 prose-ol:my-5 prose-ol:space-y-1.5
-              prose-a:text-primary-600 prose-a:font-medium prose-a:no-underline hover:prose-a:underline
-              prose-strong:text-neutral-900 prose-strong:font-semibold
-              prose-table:w-full prose-table:border-collapse
-              prose-th:bg-neutral-50 prose-th:text-left prose-th:px-4 prose-th:py-3 prose-th:text-label prose-th:font-semibold prose-th:text-neutral-600 prose-th:border prose-th:border-neutral-200
-              prose-td:px-4 prose-td:py-3 prose-td:border prose-td:border-neutral-200 prose-td:text-neutral-700 prose-td:text-body-sm
-              prose-blockquote:border-l-4 prose-blockquote:border-primary-300 prose-blockquote:pl-5 prose-blockquote:italic prose-blockquote:text-neutral-600"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          {/* Article body — JSON blocks or legacy HTML */}
+          {isBlockContent(post.content) ? (
+            <BlockRenderer blocks={parseBlocks(post.content)} />
+          ) : (
+            <div
+              className="prose prose-neutral max-w-none
+                prose-headings:font-display prose-headings:font-bold prose-headings:text-neutral-900
+                prose-h2:text-[1.6rem] prose-h2:leading-tight prose-h2:mt-12 prose-h2:mb-5 prose-h2:pb-3 prose-h2:border-b prose-h2:border-neutral-100
+                prose-h3:text-heading-lg prose-h3:mt-8 prose-h3:mb-3
+                prose-p:text-[1.0625rem] prose-p:leading-[1.85] prose-p:text-neutral-700 prose-p:my-5
+                prose-li:text-[1.0625rem] prose-li:leading-relaxed prose-li:text-neutral-700
+                prose-ul:my-5 prose-ul:space-y-1.5 prose-ol:my-5 prose-ol:space-y-1.5
+                prose-a:text-primary-600 prose-a:font-medium prose-a:no-underline hover:prose-a:underline
+                prose-strong:text-neutral-900 prose-strong:font-semibold
+                prose-table:w-full prose-table:border-collapse
+                prose-th:bg-neutral-50 prose-th:text-left prose-th:px-4 prose-th:py-3 prose-th:text-label prose-th:font-semibold prose-th:text-neutral-600 prose-th:border prose-th:border-neutral-200
+                prose-td:px-4 prose-td:py-3 prose-td:border prose-td:border-neutral-200 prose-td:text-neutral-700 prose-td:text-body-sm
+                prose-blockquote:border-l-4 prose-blockquote:border-primary-300 prose-blockquote:pl-5 prose-blockquote:italic prose-blockquote:text-neutral-600"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
+          )}
 
           {/* ── CTA ── */}
           <div className="mt-16 relative overflow-hidden bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 rounded-3xl p-8 md:p-10 text-white">

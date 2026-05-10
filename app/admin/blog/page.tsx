@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
-import { Edit2, Trash2, Plus, ArrowLeft } from 'lucide-react';
+import { Edit2, Trash2, Plus, ArrowLeft, AlertCircle } from 'lucide-react';
 
 interface BlogPost {
   id: string;
@@ -23,36 +22,34 @@ const statusStyles: Record<string, string> = {
 export default function AdminBlog() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tableExists, setTableExists] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const { data } = await supabase
-          .from('blog_posts')
-          .select('*')
-          .order('created_at', { ascending: false });
-
-        setPosts(data || []);
-      } catch (error) {
-        console.error('Error fetching blog posts:', error);
+        const res = await fetch('/api/admin/blog-posts');
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          if (res.status === 500 && err.error?.includes('does not exist')) setTableExists(false);
+          return;
+        }
+        const { posts } = await res.json();
+        setPosts(posts || []);
+      } catch (e) {
+        console.error('Error fetching blog posts:', e);
       } finally {
         setLoading(false);
       }
     };
-
     fetchPosts();
   }, []);
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you absolutely sure you want to permanently delete this post?')) return;
-
-    try {
-      await supabase.from('blog_posts').delete().eq('id', id);
-      setPosts(posts.filter(p => p.id !== id));
-    } catch (error) {
-      console.error('Error deleting post:', error);
-    }
+    const res = await fetch(`/api/admin/blog-posts/${id}`, { method: 'DELETE' });
+    if (res.ok) setPosts(posts.filter(p => p.id !== id));
+    else console.error('Delete failed', await res.json());
   };
 
   const filteredPosts = posts.filter(p =>
@@ -90,6 +87,20 @@ export default function AdminBlog() {
             className="w-full px-4 py-2 bg-transparent text-neutral-900 outline-none text-body-sm"
           />
         </div>
+
+        {/* Database setup required banner */}
+        {!tableExists && !loading && (
+          <div className="bg-rose-50 border border-rose-200 rounded-2xl p-6 flex items-start gap-4 mb-2">
+            <AlertCircle size={20} className="text-rose-500 shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="font-bold text-rose-800 mb-1">Database table not set up yet</p>
+              <p className="text-sm text-rose-700 mb-3">The <code className="bg-rose-100 px-1 rounded">blog_posts</code> table doesn&apos;t exist in Supabase. Run the one-time setup to create it and import all 25 posts.</p>
+              <Link href="/admin/blog/seed" className="inline-flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors">
+                Run Setup &amp; Import Posts →
+              </Link>
+            </div>
+          </div>
+        )}
 
         {loading ? (
           <div className="text-center py-20 text-neutral-400 font-bold animate-pulse">Loading Articles...</div>
