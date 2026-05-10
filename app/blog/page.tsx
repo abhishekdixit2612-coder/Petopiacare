@@ -49,7 +49,7 @@ function formatDate(dateStr: string) {
 
 async function getPosts(): Promise<BlogPost[]> {
   try {
-    const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? '', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '');
+    const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? '', process.env.SUPABASE_SERVICE_ROLE_KEY ?? '');
     const { data } = await db.from('blog_posts').select('id,title,slug,excerpt,featured_image,category,author,read_time_minutes,created_at').eq('status','published').order('created_at',{ascending:false});
     if (data && data.length > 0) return data as BlogPost[];
   } catch {}

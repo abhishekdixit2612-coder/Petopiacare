@@ -1,5 +1,10 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
+
+const db = () => createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+);
 
 // High SEO Value Mock Data for MVP Fallback
 export const MOCK_BLOGS = [
@@ -218,7 +223,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const category = searchParams.get('category');
     
-    let query = supabase.from('blog_posts').select('*').eq('status', 'published');
+    let query = db().from('blog_posts').select('*').eq('status', 'published');
     
     if (category && category !== 'All') {
       query = query.eq('category', category);

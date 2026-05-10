@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
 import { MOCK_BLOGS } from '../route';
+
+const db = () => createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+);
 
 export async function GET(
   req: Request,
@@ -9,7 +14,7 @@ export async function GET(
   try {
     const { slug } = await params;
 
-    const { data: post, error } = await supabase
+    const { data: post, error } = await db()
       .from('blog_posts')
       .select('*')
       .eq('slug', slug)

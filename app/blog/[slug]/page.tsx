@@ -587,7 +587,7 @@ const MOCK_POSTS: Post[] = [
 
 async function getPost(slug: string): Promise<Post | null> {
   try {
-    const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? '', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '');
+    const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? '', process.env.SUPABASE_SERVICE_ROLE_KEY ?? '');
     const { data } = await db.from('blog_posts').select('*').eq('slug', slug).eq('status', 'published').single();
     if (data) return data as Post;
   } catch {}

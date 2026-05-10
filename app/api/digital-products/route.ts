@@ -1,5 +1,10 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
+
+const db = () => createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+);
 
 export const MOCK_DIGITAL_PRODUCTS = [
   {
@@ -209,7 +214,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const category = searchParams.get('category');
     
-    let query = supabase.from('digital_products').select('*');
+    let query = db().from('digital_products').select('*');
     if (category && category !== 'All') {
       query = query.eq('category', category);
     }
