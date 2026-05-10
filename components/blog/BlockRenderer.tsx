@@ -1,6 +1,27 @@
 import type { ContentBlock } from '@/types/blog-blocks'
 import { Lightbulb, AlertTriangle, Info, CheckCircle2, BookOpen } from 'lucide-react'
 
+function RichText({ text }: { text: string }) {
+  const parts = text.split(/(\*\*.*?\*\*|\*.*?\*|\[.*?\]\(.*?\))/g)
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          return <strong key={i} className="font-semibold text-neutral-900">{part.slice(2, -2)}</strong>
+        }
+        if (part.startsWith('*') && part.endsWith('*') && !part.startsWith('**')) {
+          return <em key={i}>{part.slice(1, -1)}</em>
+        }
+        const linkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/)
+        if (linkMatch) {
+          return <a key={i} href={linkMatch[2]} className="text-primary-600 font-medium underline underline-offset-2 hover:text-primary-700" target={linkMatch[2].startsWith('http') ? '_blank' : undefined} rel={linkMatch[2].startsWith('http') ? 'noreferrer' : undefined}>{linkMatch[1]}</a>
+        }
+        return <span key={i}>{part}</span>
+      })}
+    </>
+  )
+}
+
 interface Props {
   blocks: ContentBlock[]
 }
@@ -20,7 +41,7 @@ function BlockItem({ block }: { block: ContentBlock }) {
     case 'paragraph':
       return (
         <p className="text-[1.0625rem] leading-[1.85] text-neutral-700 my-5">
-          {block.content}
+          <RichText text={block.content ?? ''} />
         </p>
       )
 

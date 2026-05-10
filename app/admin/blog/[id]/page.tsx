@@ -8,7 +8,7 @@ import UnsplashImagePicker from '@/components/UnsplashImagePicker'
 import BlockEditor from '@/components/admin/BlockEditor'
 import type { UnsplashImage } from '@/types/unsplash'
 import type { ContentBlock } from '@/types/blog-blocks'
-import { isBlockContent, parseBlocks, serializeBlocks, countWordsInBlocks, createBlock } from '@/types/blog-blocks'
+import { isBlockContent, parseBlocks, parseHtmlToBlocks, serializeBlocks, countWordsInBlocks } from '@/types/blog-blocks'
 import { getSearchQuery } from '@/config/imageSearchMapping'
 
 interface FormData {
@@ -35,7 +35,6 @@ export default function EditBlogPost() {
     seo_description: '', seo_keywords: '', status: 'draft',
   })
   const [blocks, setBlocks] = useState<ContentBlock[]>([])
-  const [isLegacyHtml, setIsLegacyHtml] = useState(false)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -62,11 +61,12 @@ export default function EditBlogPost() {
           status: data.status ?? 'draft',
         })
 
-        if (isBlockContent(data.content ?? '')) {
-          setBlocks(parseBlocks(data.content))
-          setIsLegacyHtml(false)
-        } else {
-          setIsLegacyHtml(true)
+        const raw = data.content ?? ''
+        if (isBlockContent(raw)) {
+          setBlocks(parseBlocks(raw))
+        } else if (raw.trim()) {
+          // Auto-convert legacy HTML → blocks (no manual step needed)
+          setBlocks(parseHtmlToBlocks(raw))
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load post')
@@ -102,36 +102,14 @@ export default function EditBlogPost() {
     setShowImagePicker(false)
   }
 
-  const migrateToBlocks = () => {
-    const migrated: ContentBlock[] = []
-    if (formData.content.trim()) {
-      const p = createBlock('paragraph')
-      p.content = '⚠️ This post was written in legacy HTML format. Its content has been preserved below as plain text. Please rewrite it using the block editor for premium formatting.'
-      const warning = createBlock('warning')
-      warning.title = 'Legacy Content'
-      warning.content = formData.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 2000)
-      migrated.push(p, warning)
-    }
-    setBlocks(migrated)
-    setIsLegacyHtml(false)
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
     setError('')
 
     try {
-      let finalContent: string
-      let readTime: number
-
-      if (isLegacyHtml) {
-        finalContent = formData.content
-        readTime = Math.max(1, Math.ceil(finalContent.split(/\s+/).length / 200))
-      } else {
-        finalContent = serializeBlocks(blocks)
-        readTime = Math.max(1, Math.ceil(countWordsInBlocks(blocks) / 200))
-      }
+      const finalContent = serializeBlocks(blocks)
+      const readTime = Math.max(1, Math.ceil(countWordsInBlocks(blocks) / 200))
 
       const res = await fetch(`/api/admin/blog-posts/${id}`, {
         method: 'PATCH',
@@ -219,35 +197,10 @@ export default function EditBlogPost() {
                 />
               </div>
 
-              {/* Content editor */}
+              {/* Content editor — always block-based */}
               <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-sm font-bold text-gray-700">Article Content</label>
-                  {isLegacyHtml && (
-                    <button
-                      type="button"
-                      onClick={migrateToBlocks}
-                      className="text-xs font-bold text-primary-600 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-lg transition-colors"
-                    >
-                      ✦ Upgrade to Block Editor
-                    </button>
-                  )}
-                </div>
-
-                {isLegacyHtml ? (
-                  <div>
-                    <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-3 text-sm text-amber-800">
-                      <AlertCircle size={15} className="shrink-0 mt-0.5" />
-                      <span>This post uses legacy HTML. Click <strong>Upgrade to Block Editor</strong> to switch to rich blocks — tip boxes, tables, takeaways, and more.</span>
-                    </div>
-                    <textarea
-                      name="content" value={formData.content} onChange={handleChange} rows={14} required
-                      className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none font-mono text-sm leading-relaxed"
-                    />
-                  </div>
-                ) : (
-                  <BlockEditor blocks={blocks} onChange={setBlocks} />
-                )}
+                <label className="block text-sm font-bold text-gray-700 mb-3">Article Content</label>
+                <BlockEditor blocks={blocks} onChange={setBlocks} />
               </div>
             </div>
 

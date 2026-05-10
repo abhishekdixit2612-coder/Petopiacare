@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Save, Plus, Trash2, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Save, Plus, Trash2, AlertCircle, Upload, Loader2, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
 interface FormData {
@@ -34,7 +34,10 @@ export default function EditDigitalProduct() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
   const [error, setError] = useState('');
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -87,6 +90,25 @@ export default function EditDigitalProduct() {
   const addFeature = () => setFormData(prev => ({ ...prev, features: [...prev.features, ''] }));
   const removeFeature = (idx: number) =>
     setFormData(prev => ({ ...prev, features: prev.features.filter((_, i) => i !== idx) }));
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setUploadError('');
+    const body = new FormData();
+    body.append('file', file);
+    try {
+      const res = await fetch('/api/admin/upload', { method: 'POST', body });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? 'Upload failed');
+      setFormData(prev => ({ ...prev, download_url: data.url }));
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -219,10 +241,40 @@ export default function EditDigitalProduct() {
                   placeholder="https://..." className={`${inputCls} font-mono text-xs`} />
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Download URL</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Download File</label>
+
+                {/* Upload button */}
+                <input ref={fileRef} type="file" accept=".pdf,.zip,.epub,.mp4,.docx" onChange={handleFileUpload} className="hidden" />
+                <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading}
+                  className="w-full mb-2 flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 hover:border-primary-400 hover:bg-primary-50 rounded-xl py-3 text-sm font-semibold text-gray-500 hover:text-primary-600 transition-all disabled:opacity-60">
+                  {uploading ? <><Loader2 size={14} className="animate-spin" /> Uploading...</> : <><Upload size={14} /> Upload PDF / ZIP</>}
+                </button>
+
+                {uploadError && (
+                  <div className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-2">
+                    {uploadError.includes('Bucket not found') ? (
+                      <>
+                        <strong>Storage bucket missing.</strong> Go to{' '}
+                        <a href="https://supabase.com/dashboard/project/ftvaewmvghxkhwjgishc/storage/buckets" target="_blank" rel="noreferrer" className="underline font-bold">
+                          Supabase → Storage
+                        </a>{' '}
+                        → New bucket → name: <code className="bg-amber-100 px-1 rounded">digital-downloads</code> → set to <strong>Public</strong>.
+                      </>
+                    ) : uploadError}
+                  </div>
+                )}
+
+                {/* Manual URL input */}
                 <input type="url" name="download_url" value={formData.download_url} onChange={handleChange}
-                  placeholder="https://..." className={`${inputCls} font-mono text-xs`} />
-                <p className="text-xs text-gray-400 mt-1">PDF, ZIP, or external link</p>
+                  placeholder="Or paste URL directly (Google Drive, Dropbox, etc.)"
+                  className={`${inputCls} font-mono text-xs`} />
+
+                {formData.download_url && (
+                  <a href={formData.download_url} target="_blank" rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-primary-600 hover:underline mt-1">
+                    <ExternalLink size={11} /> Test download link
+                  </a>
+                )}
               </div>
             </div>
 
