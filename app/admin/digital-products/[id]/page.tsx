@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Save, Plus, Trash2, AlertCircle, Upload, Loader2, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Save, Plus, Trash2, AlertCircle, Upload, Loader2, ExternalLink, Search, X } from 'lucide-react';
 import Link from 'next/link';
+import UnsplashImagePicker from '@/components/UnsplashImagePicker';
+import type { UnsplashImage } from '@/types/unsplash';
 
 interface FormData {
   title: string;
@@ -37,7 +39,21 @@ export default function EditDigitalProduct() {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const [error, setError] = useState('');
+  const [showImagePicker, setShowImagePicker] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<UnsplashImage | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleUnsplashSelect = (image: UnsplashImage) => {
+    setSelectedImage(image);
+    setFormData(prev => ({ ...prev, thumbnail_url: image.urls.regular }));
+    setShowImagePicker(false);
+  };
+
+  const getSearchQuery = () => {
+    if (formData.title.trim()) return formData.title.trim().toLowerCase().replace(/[^a-z0-9\s]/g, '').slice(0, 40);
+    if (formData.category) return `${formData.category.toLowerCase()} dog`;
+    return 'dog pet india';
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -238,13 +254,36 @@ export default function EditDigitalProduct() {
             {/* Thumbnail + Download URL */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Thumbnail URL</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Cover Image</label>
                 {formData.thumbnail_url && (
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img src={formData.thumbnail_url} alt="" className="w-full h-28 object-cover rounded-xl mb-2" />
+                  <div className="relative mb-2 rounded-xl overflow-hidden h-32 bg-gray-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={formData.thumbnail_url} alt="" className="w-full h-full object-cover" />
+                    <button type="button" onClick={() => { setSelectedImage(null); setFormData(p => ({ ...p, thumbnail_url: '' })); }}
+                      className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-1.5 rounded-lg transition-colors">
+                      <X size={13} />
+                    </button>
+                    {selectedImage && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[10px] px-2 py-1">
+                        Photo by {selectedImage.user.name} on Unsplash
+                      </div>
+                    )}
+                  </div>
                 )}
+                <button type="button" onClick={() => setShowImagePicker(true)}
+                  className="w-full flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white text-sm font-bold px-4 py-2.5 rounded-xl transition-colors mb-2">
+                  <Search size={14} /> Search Unsplash
+                </button>
                 <input type="url" name="thumbnail_url" value={formData.thumbnail_url} onChange={handleChange}
-                  placeholder="https://..." className={`${inputCls} font-mono text-xs`} />
+                  placeholder="Or paste image URL..." className={`${inputCls} font-mono text-xs`} />
+                {showImagePicker && (
+                  <UnsplashImagePicker
+                    searchQuery={getSearchQuery()}
+                    selectedImage={selectedImage}
+                    onImageSelect={handleUnsplashSelect}
+                    onClose={() => setShowImagePicker(false)}
+                  />
+                )}
               </div>
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">Download File</label>
