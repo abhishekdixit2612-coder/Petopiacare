@@ -30,7 +30,32 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code} /learn/life-stages/adult\\\\n\" http://localhost:3000/learn/life-stages/adult)",
       "Bash(curl -s -o /dev/null -w \"%{http_code} /learn/nutrition/dry-kibble-guide\\\\n\" http://localhost:3000/learn/nutrition/dry-kibble-guide)",
       "Bash(curl -s -o /dev/null -w \"%{http_code} /learn/health/tick-fever-ehrlichiosis\\\\n\" http://localhost:3000/learn/health/tick-fever-ehrlichiosis)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code} /learn/behavior/leash-pulling\\\\n\" http://localhost:3000/learn/behavior/leash-pulling)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code} /learn/behavior/leash-pulling\\\\n\" http://localhost:3000/learn/behavior/leash-pulling)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/blog)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/blog)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/blog/best-dog-food-brands-india)",
+      "Bash(curl -s http://localhost:3000/blog/best-dog-food-brands-india)",
+      "Bash(curl -s http://localhost:3000/blog/summer-dog-care-india)",
+      "Bash(git -C \"/Users/abhishekdixit/Documents/Petopia/Petopiacare.in\" status)",
+      "Bash(git -C \"/Users/abhishekdixit/Documents/Petopia/Petopiacare.in\" diff --stat)",
+      "Bash(git -C \"/Users/abhishekdixit/Documents/Petopia/Petopiacare.in\" log --oneline -3)",
+      "Bash(git -C \"/Users/abhishekdixit/Documents/Petopia/Petopiacare.in\" add app/blog/page.tsx \"app/blog/[slug]/page.tsx\" app/globals.css lib/blog-content.ts)",
+      "Bash(git -C /Users/abhishekdixit/Documents/Petopia/Petopiacare.in commit -m ' *)",
+      "Bash(git -C \"/Users/abhishekdixit/Documents/Petopia/Petopiacare.in\" push origin main)",
+      "Bash(mkdir -p /Users/abhishekdixit/Documents/Petopia/Petopiacare.in/app/admin/blog/\\\\[id\\\\])",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dmFld212Z2h4a2h3amdpc2hjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNjYyNzUsImV4cCI6MjA5MDk0MjI3NX0.DbGgp_6xXBhpCYOpoBJ7XIWEjYafPMKgEskyt0N309Y' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dmFld212Z2h4a2h3amdpc2hjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNjYyNzUsImV4cCI6MjA5MDk0MjI3NX0.DbGgp_6xXBhpCYOpoBJ7XIWEjYafPMKgEskyt0N309Y' 'https://ftvaewmvghxkhwjgishc.supabase.co/rest/v1/blog_posts?limit=1')",
+      "Bash(curl -s -w '\\\\n%{http_code}' -X POST -H 'Content-Type: application/json' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dmFld212Z2h4a2h3amdpc2hjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTM2NjI3NSwiZXhwIjoyMDkwOTQyMjc1fQ.n1H4ryIS9RwF1BcQhvi47Ve6-cr0FjMbYUZaMa3hQF4' -d '{\"query\":\"SELECT 1\"}' https://ftvaewmvghxkhwjgishc.supabase.co/pg/query)",
+      "Bash(curl -s -w '\\\\n%{http_code}' -X POST -H 'Content-Type: application/json' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dmFld212Z2h4a2h3amdpc2hjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTM2NjI3NSwiZXhwIjoyMDkwOTQyMjc1fQ.n1H4ryIS9RwF1BcQhvi47Ve6-cr0FjMbYUZaMa3hQF4' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dmFld212Z2h4a2h3amdpc2hjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTM2NjI3NSwiZXhwIjoyMDkwOTQyMjc1fQ.n1H4ryIS9RwF1BcQhvi47Ve6-cr0FjMbYUZaMa3hQF4' -d '{\"query\":\"CREATE TABLE IF NOT EXISTS blog_posts \\(id UUID PRIMARY KEY DEFAULT gen_random_uuid\\(\\), title VARCHAR\\(255\\) NOT NULL, slug VARCHAR\\(255\\) UNIQUE NOT NULL, excerpt VARCHAR\\(500\\), content TEXT NOT NULL, featured_image VARCHAR\\(500\\), category VARCHAR\\(50\\), author VARCHAR\\(100\\) DEFAULT '\\\\''PetopiaCare'\\\\'', read_time_minutes INT, status VARCHAR\\(20\\) DEFAULT '\\\\''published'\\\\'', seo_title VARCHAR\\(60\\), seo_description VARCHAR\\(160\\), seo_keywords VARCHAR\\(200\\), view_count INT DEFAULT 0, created_at TIMESTAMP DEFAULT NOW\\(\\), updated_at TIMESTAMP DEFAULT NOW\\(\\)\\)\"}' https://ftvaewmvghxkhwjgishc.supabase.co/rest/v1/rpc/exec_sql)",
+      "Bash(mkdir -p \"/Users/abhishekdixit/Documents/Petopia/Petopiacare.in/app/admin/digital-products/[id]\" \"/Users/abhishekdixit/Documents/Petopia/Petopiacare.in/app/admin/digital-products/seed\")",
+      "Bash(mkdir -p \\\\ *)",
+      "Bash(npx vercel *)",
+      "Bash(vercel --prod --yes)"
+    ],
+    "additionalDirectories": [
+      "/Users/abhishekdixit/Documents/Petopia/Petopiacare.in/app/admin/blog",
+      "/Users/abhishekdixit/Documents/Petopia/Petopiacare.in/app/admin/digital-products",
+      "/Users/abhishekdixit/Documents/Petopia/Petopiacare.in/app/api/admin/blog-posts"
     ]
   }
 }

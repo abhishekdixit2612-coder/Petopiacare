@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
-import { ArrowLeft, Send, Plus, Trash2, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Send, Plus, Trash2, AlertCircle, Upload, Loader2, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
 const CATEGORIES = ['Checklist', 'Guide', 'eBook', 'Course'];
@@ -20,7 +19,29 @@ export default function NewDigitalProduct() {
     rating: '4.9', review_count: '0', badge: 'Free', features: [''],
   });
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
   const [error, setError] = useState('');
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setUploadError('');
+    const body = new FormData();
+    body.append('file', file);
+    try {
+      const res = await fetch('/api/admin/upload', { method: 'POST', body });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? 'Upload failed');
+      setFormData(prev => ({ ...prev, download_url: data.url }));
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -56,23 +77,28 @@ export default function NewDigitalProduct() {
     setLoading(true);
     setError('');
 
-    const { error: err } = await supabase.from('digital_products').insert([{
-      title: formData.title,
-      slug: formData.slug || generateSlug(formData.title),
-      price: parseFloat(formData.price) || 0,
-      category: formData.category,
-      tier: formData.tier,
-      short_description: formData.short_description,
-      thumbnail_url: formData.thumbnail_url,
-      download_url: formData.download_url,
-      rating: parseFloat(formData.rating) || 4.9,
-      review_count: parseInt(formData.review_count) || 0,
-      badge: formData.badge,
-      features: formData.features.filter(Boolean),
-    }]);
+    const res = await fetch('/api/admin/dp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: formData.title,
+        slug: formData.slug || generateSlug(formData.title),
+        price: parseFloat(formData.price) || 0,
+        category: formData.category,
+        tier: formData.tier,
+        short_description: formData.short_description,
+        thumbnail_url: formData.thumbnail_url,
+        download_url: formData.download_url,
+        rating: parseFloat(formData.rating) || 4.9,
+        review_count: parseInt(formData.review_count) || 0,
+        badge: formData.badge,
+        features: formData.features.filter(Boolean),
+      }),
+    });
+    const data = await res.json();
 
     setLoading(false);
-    if (err) { setError(err.message); return; }
+    if (!res.ok) { setError(data.error ?? 'Failed to create product'); return; }
     router.push('/admin/digital-products');
   };
 
@@ -163,8 +189,34 @@ export default function NewDigitalProduct() {
                 <input type="url" name="thumbnail_url" value={formData.thumbnail_url} onChange={handleChange} placeholder="https://..." className={`${inputCls} font-mono text-xs`} />
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Download URL</label>
-                <input type="url" name="download_url" value={formData.download_url} onChange={handleChange} placeholder="https://..." className={`${inputCls} font-mono text-xs`} />
+                <label className="block text-sm font-bold text-gray-700 mb-2">Download File</label>
+                <input ref={fileRef} type="file" accept=".pdf,.zip,.epub,.mp4,.docx" onChange={handleFileUpload} className="hidden" />
+                <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading}
+                  className="w-full mb-2 flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 hover:border-primary-400 hover:bg-primary-50 rounded-xl py-3 text-sm font-semibold text-gray-500 hover:text-primary-600 transition-all disabled:opacity-60">
+                  {uploading ? <><Loader2 size={14} className="animate-spin" /> Uploading...</> : <><Upload size={14} /> Upload PDF / ZIP</>}
+                </button>
+                {uploadError && (
+                  <div className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-2">
+                    {uploadError.includes('Bucket not found') ? (
+                      <>
+                        <strong>Storage bucket missing.</strong> Go to{' '}
+                        <a href="https://supabase.com/dashboard/project/ftvaewmvghxkhwjgishc/storage/buckets" target="_blank" rel="noreferrer" className="underline font-bold">
+                          Supabase → Storage
+                        </a>{' '}
+                        → New bucket → name: <code className="bg-amber-100 px-1 rounded">digital-downloads</code> → set to <strong>Public</strong>.
+                      </>
+                    ) : uploadError}
+                  </div>
+                )}
+                <input type="url" name="download_url" value={formData.download_url} onChange={handleChange}
+                  placeholder="Or paste URL (Google Drive, Dropbox…)"
+                  className={`${inputCls} font-mono text-xs`} />
+                {formData.download_url && (
+                  <a href={formData.download_url} target="_blank" rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-primary-600 hover:underline mt-1">
+                    <ExternalLink size={11} /> Test link
+                  </a>
+                )}
               </div>
             </div>
 

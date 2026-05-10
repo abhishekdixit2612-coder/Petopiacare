@@ -15,3 +15,15 @@ export async function GET() {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ products: data ?? [] });
 }
+
+export async function POST(req: Request) {
+  const body = await req.json();
+  const { data, error } = await admin()
+    .from('digital_products')
+    .insert([body])
+    .select('id')
+    .single();
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ ok: true, id: data?.id });
+}
